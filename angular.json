@@ -32,6 +32,10 @@
             "scripts": [
               "dist/ngx-blockly/scripts/blockly/blockly_compressed.js",
               "dist/ngx-blockly/scripts/blockly/blocks_compressed.js",
+              "dist/ngx-blockly/scripts/blockly/dart_compressed.js",
+              "dist/ngx-blockly/scripts/blockly/javascript_compressed.js",
+              "dist/ngx-blockly/scripts/blockly/lua_compressed.js",
+              "dist/ngx-blockly/scripts/blockly/php_compressed.js",
               "dist/ngx-blockly/scripts/blockly/python_compressed.js",
               "dist/ngx-blockly/scripts/blockly/msg/js/en.js",
               "dist/ngx-blockly/scripts/blockly/msg/js/de.js"

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NgxBlocklyConfig } from '../../projects/ngx-blockly/src/lib/ngx-blockly/ngx-blockly.config';
+import { NgxBlocklyGeneratorConfig } from '../../projects/ngx-blockly/src/lib/ngx-blockly/ngx-blockly-generator.config';
 
 @Component({
     selector: 'app-root',
@@ -21,4 +22,17 @@ export class AppComponent {
         scrollbars: true,
         trashcan: true
     };
+
+
+    public generatorConfig: NgxBlocklyGeneratorConfig = {
+        dart: true,
+        javascript: true,
+        lua: true,
+        php: true,
+        python: true,
+    };
+
+    onCode(code: string) {
+        console.log(code);
+    }
 }

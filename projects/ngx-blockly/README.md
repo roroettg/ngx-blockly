@@ -15,7 +15,6 @@ Add the blockly scripts in `angular.json`
     "node_modules/ngx-blockly/scripts/blockly/blocks_compressed.js",
     "node_modules/ngx-blockly/scripts/blockly/python_compressed.js",
     "node_modules/ngx-blockly/scripts/blockly/msg/js/en.js",
-    "node_modules/ngx-blockly/scripts/blockly/msg/js/de.js"
 ]
 ```
 
@@ -43,7 +42,7 @@ import { NgxBlocklyModule } from 'ngx-blockly';
 export class AppModule {
 }
 ```
-Example app.component.ts
+'Example app.component.ts'
 ```typescript
 import {NgxBlocklyConfig } from 'ngx-blockly';
 
@@ -69,7 +68,7 @@ Example app.component.ts
 <ngx-blockly [config]="config"></ngx-blockly>
 
 ```
-Styling
+### Styling
 ```scss
 ngx-blockly {
   position: absolute;
@@ -78,7 +77,8 @@ ngx-blockly {
 }
 ```
 
-Configuration (see https://developers.google.com/blockly/guides/get-started/web#configuration)
+### Configuration 
+Default Blockly Configuration (see https://developers.google.com/blockly/guides/get-started/web#configuration)
 ```typescript
 export class NgxBlocklyConfig {
     collapse?: boolean; // Allows blocks to be collapsed or expanded. Defaults to true if the toolbox has categories, false otherwise.
@@ -116,3 +116,60 @@ export class NgxBlocklyConfig {
 
 }
 ```
+Blockly Generator Config
+```typescript
+export class NgxBlocklyGeneratorConfig {
+    dart?: boolean;
+    javascript?: boolean;
+    lua?: boolean;
+    php?: boolean;
+    python?: boolean;
+}
+
+```
+### Code Generation
+```typescript
+import { Component } from '@angular/core';
+import { NgxBlocklyConfig, NgxBlocklyGeneratorConfig } from 'ngx-blockly';
+
+@Component({
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss']
+})
+export class AppComponent {
+
+    public config: NgxBlocklyConfig = {
+        toolbox: '<xml id="toolbox" style="display: none">' +
+            '<block type="controls_if"></block>' +
+            '<block type="controls_repeat_ext"></block>' +
+            '<block type="logic_compare"></block>' +
+            '<block type="math_number"></block>' +
+            '<block type="math_arithmetic"></block>' +
+            '<block type="text"></block>' +
+            '<block type="text_print"></block>' +
+            '</xml>',
+        scrollbars: true,
+        trashcan: true
+    };
+
+
+    public generatorConfig: NgxBlocklyGeneratorConfig = {
+        dart: true,
+        javascript: true,
+        lua: true,
+        php: true,
+        python: true,
+    };
+
+    onCode(code: string) {
+        console.log(code);
+    }
+}
+
+```
+```html
+<ngx-blockly [config]="config" [generatorConfig]="generatorConfig" (javascriptCode)="onCode($event)" (pythonCode)="onCode($event)"></ngx-blockly>
+
+```
+
