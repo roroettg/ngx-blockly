@@ -1,3 +1,7 @@
+# NGX-Blockly
+
+An angular wrapper for google's blockly
+
 ## Setup
 
 ### Installation

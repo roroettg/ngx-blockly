@@ -1,6 +1,7 @@
-import { AfterViewInit, Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { NgxBlocklyConfig } from './ngx-blockly.config';
 import { NgxBlocklyGeneratorConfig } from './ngx-blockly-generator.config';
+import { Block } from './models/block';
 
 declare var Blockly: any;
 
@@ -9,9 +10,10 @@ declare var Blockly: any;
     templateUrl: './ngx-blockly.component.html',
     styleUrls: ['./ngx-blockly.component.css']
 })
-export class NgxBlocklyComponent implements AfterViewInit {
+export class NgxBlocklyComponent implements OnInit, AfterViewInit {
     @Input() public config: NgxBlocklyConfig = {};
     @Input() public generatorConfig: NgxBlocklyGeneratorConfig = {};
+    @Input() public customBlocks: Block[] = [];
     @Output() public dartCode: EventEmitter<string> = new EventEmitter<string>();
     @Output() public javascriptCode: EventEmitter<string> = new EventEmitter<string>();
     @Output() public luaCode: EventEmitter<string> = new EventEmitter<string>();
@@ -21,7 +23,49 @@ export class NgxBlocklyComponent implements AfterViewInit {
     public workspace: any;
 
     constructor() {
+    }
 
+    ngOnInit(): void {
+        if (this.customBlocks) {
+            for (const block of this.customBlocks) {
+                Blockly.Blocks[block.name] = {
+                    init: function () {
+                        block.init(this);
+                    }
+                };
+
+                Blockly.Dart[block.name] = function (blocklyBlock) {
+                    return block.toDartCode();
+                };
+
+                Blockly.JavaScript[block.name] = function (blocklyBlock) {
+                    return block.toJavaScriptCode();
+                };
+
+                Blockly.Lua[block.name] = function (blocklyBlock) {
+                    return block.toLuaCode();
+                };
+
+                Blockly.PHP[block.name] = function (blocklyBlock) {
+                    return block.toPHPCode();
+                };
+
+                Blockly.Python[block.name] = function (blocklyBlock) {
+                    return block.toPythonCode();
+                };
+
+                if (block.blockMutator) {
+                    Blockly.Extensions.registerMutator(block.blockMutator.name, {
+                        mutationToDom: function () {
+                            return block.blockMutator.mutationToDom();
+                        },
+                        domToMutation: function (xmlElement: any) {
+                            block.blockMutator.domToMutation(xmlElement);
+                        }
+                    });
+                }
+            }
+        }
     }
 
     ngAfterViewInit() {
@@ -32,7 +76,6 @@ export class NgxBlocklyComponent implements AfterViewInit {
             });
             this.resize();
         }
-
     }
 
     @HostListener('window:resize', ['$event'])
@@ -68,4 +111,5 @@ export class NgxBlocklyComponent implements AfterViewInit {
             this.pythonCode.emit(Blockly.Python.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
         }
     }
+
 }
