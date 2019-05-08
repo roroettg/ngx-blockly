@@ -33,26 +33,32 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit {
                         block.init(this);
                     }
                 };
+                if (typeof Blockly.Dart !== 'undefined') {
+                    Blockly.Dart[block.name] = function (blocklyBlock) {
+                        return block.toDartCode();
+                    };
+                }
 
-                Blockly.Dart[block.name] = function (blocklyBlock) {
-                    return block.toDartCode();
-                };
-
-                Blockly.JavaScript[block.name] = function (blocklyBlock) {
-                    return block.toJavaScriptCode();
-                };
-
-                Blockly.Lua[block.name] = function (blocklyBlock) {
-                    return block.toLuaCode();
-                };
-
-                Blockly.PHP[block.name] = function (blocklyBlock) {
-                    return block.toPHPCode();
-                };
-
-                Blockly.Python[block.name] = function (blocklyBlock) {
-                    return block.toPythonCode();
-                };
+                if (typeof Blockly.JavaScript !== 'undefined') {
+                    Blockly.JavaScript[block.name] = function (blocklyBlock) {
+                        return block.toJavaScriptCode();
+                    };
+                }
+                if (typeof Blockly.Lua !== 'undefined') {
+                    Blockly.Lua[block.name] = function (blocklyBlock) {
+                        return block.toLuaCode();
+                    };
+                }
+                if (typeof Blockly.PHP !== 'undefined') {
+                    Blockly.PHP[block.name] = function (blocklyBlock) {
+                        return block.toPHPCode();
+                    };
+                }
+                if (typeof Blockly.Python !== 'undefined') {
+                    Blockly.Python[block.name] = function (blocklyBlock) {
+                        return block.toPythonCode();
+                    };
+                }
 
                 if (block.blockMutator) {
                     Blockly.Extensions.registerMutator(block.blockMutator.name, {
@@ -96,18 +102,33 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit {
 
     private workspaceToCode(workspaceId: string) {
         if (this.generatorConfig.dart) {
+            if (typeof Blockly.Dart === 'undefined') {
+                throw new Error('Dart is undefined probably due to missing blockly dart.js');
+            }
             this.dartCode.emit(Blockly.Dart.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
         }
         if (this.generatorConfig.javascript) {
+            if (typeof Blockly.JavaScript === 'undefined') {
+                throw new Error('JavaScript is undefined probably due to missing blockly javascript.js');
+            }
             this.javascriptCode.emit(Blockly.JavaScript.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
         }
         if (this.generatorConfig.lua) {
+            if (typeof Blockly.Lua === 'undefined') {
+                throw new Error('Lua is undefined probably due to missing blockly lua.js');
+            }
             this.luaCode.emit(Blockly.Lua.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
         }
         if (this.generatorConfig.php) {
+            if (typeof Blockly.PHP === 'undefined') {
+                throw new Error('PHP is undefined probably due to missing blockly php.js');
+            }
             this.phpCode.emit(Blockly.PHP.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
         }
         if (this.generatorConfig.python) {
+            if (typeof Blockly.Python === 'undefined') {
+                throw new Error('Python is undefined probably due to missing blockly python.js');
+            }
             this.pythonCode.emit(Blockly.Python.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
         }
     }

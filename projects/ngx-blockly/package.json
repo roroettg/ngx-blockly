@@ -1,6 +1,6 @@
 {
   "name": "ngx-blockly",
-  "version": "0.0.24",
+  "version": "0.0.26",
   "description": "An angular wrapper for google's blockly.",
   "repository": {
     "type": "git",
