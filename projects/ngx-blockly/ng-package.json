@@ -3,5 +3,7 @@
   "dest": "../../dist/ngx-blockly",
   "lib": {
     "entryFile": "src/public_api.ts"
-  }
+  },
+  "whitelistedNonPeerDependencies": [
+  ]
 }

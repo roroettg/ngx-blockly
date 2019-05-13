@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { NgxBlocklyConfig } from '../../projects/ngx-blockly/src/lib/ngx-blockly/ngx-blockly.config';
 import { NgxBlocklyGeneratorConfig } from '../../projects/ngx-blockly/src/lib/ngx-blockly/ngx-blockly-generator.config';
+import { Block } from '../../projects/ngx-blockly/src/lib/ngx-blockly/models/block';
+import { TestBlock } from './block/test-block';
+import { DeviceBlock } from './block/device-block';
 
 @Component({
     selector: 'app-root',
@@ -11,13 +14,10 @@ export class AppComponent {
 
     public config: NgxBlocklyConfig = {
         toolbox: '<xml id="toolbox" style="display: none">' +
-            '<block type="controls_if"></block>' +
-            '<block type="controls_repeat_ext"></block>' +
-            '<block type="logic_compare"></block>' +
-            '<block type="math_number"></block>' +
-            '<block type="math_arithmetic"></block>' +
-            '<block type="text"></block>' +
-            '<block type="text_print"></block>' +
+            '<category name="Fischertechnik" colour="#FF0000">' +
+            '<block type="device"></block>' +
+            '<block type="test"></block>' +
+            '</category>' +
             '</xml>',
         scrollbars: true,
         trashcan: true
@@ -31,6 +31,15 @@ export class AppComponent {
         php: true,
         python: true,
     };
+
+    public customBlocks: Block[] = [
+        new TestBlock('test', [], null),
+        new DeviceBlock('device', [], null)
+    ];
+
+
+    constructor() {
+    }
 
     onCode(code: string) {
         console.log(code);
