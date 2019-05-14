@@ -177,3 +177,49 @@ export class AppComponent {
 
 ```
 
+### Blockly Toolbox
+XML-Definition
+```typescript
+public config: NgxBlocklyConfig = {
+        toolbox: '<xml id="toolbox" style="display: none">' +
+            '<block type="controls_if"></block>' +
+            '<block type="controls_repeat_ext"></block>' +
+            '<block type="logic_compare"></block>' +
+            '<block type="math_number"></block>' +
+            '<block type="math_arithmetic"></block>' +
+            '<block type="text"></block>' +
+            '<block type="text_print"></block>' +
+            '</xml>',
+        scrollbars: true,
+        trashcan: true
+    };
+```
+
+Toolbox Generator
+```typescript
+    public customBlocks: CustomBlock[] = [
+        new TestBlock('test', null, null),
+        new DeviceBlock('device', null, null)
+    ];
+
+
+    constructor(ngxToolboxBuilder: NgxToolboxBuilderService) {
+        const customCategories: Category[] = [
+            new Category(this.customBlocks, '#FF00FF', 'CustomCategory', null)
+        ];
+        ngxToolboxBuilder.customCategories = customCategories;
+        ngxToolboxBuilder.logicOperators = true;
+        ngxToolboxBuilder.loopOperators = true;
+        ngxToolboxBuilder.mathOperators = true;
+        ngxToolboxBuilder.textOperators = true;
+        ngxToolboxBuilder.listOperators = true;
+        ngxToolboxBuilder.colourOperators = true;
+        ngxToolboxBuilder.variableOperators = true;
+        ngxToolboxBuilder.functionOperators = true;
+        this.config.toolbox = ngxToolboxBuilder.build();
+    }
+```
+
+
+
+
