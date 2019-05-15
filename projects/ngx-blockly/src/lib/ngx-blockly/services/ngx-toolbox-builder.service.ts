@@ -84,23 +84,13 @@ export class NgxToolboxBuilderService {
     private _categories: Category[];
 
     public build(): string {
-        let xml = '<xml id="toolbox" style="display: none">\n';
+        let xml = '<xml id="toolbox" style="display: none">';
         if (this.categories) {
             for (const category of this.categories) {
-                xml += category.toXML() + '\n';
+                xml += category.toXML();
             }
         }
-        // xml += LOGIC_CATEGORY.toXML();
-        // xml += this.loopOperators ? LOOP_CATEGORY.toXML() : '';
-        // xml += this.mathOperators ? MATH_CATEGORY.toXML() : '';
-        // xml += this.textOperators ? TEXT_CATEGORY.toXML() : '';
-        // xml += this.listOperators ? LISTS_CATEGORY.toXML() : '';
-        // xml += this.colourOperators ? COLOUR_CATEGORY.toXML() : '';
-        // xml += this.variableOperators ? VARIABLES_CATEGORY.toXML() : '';
-        // xml += this.functionOperators ? FUNCTIONS_CATEGORY.toXML() : '';
         xml += '</xml>';
-        console.log(xml);
-
         return xml;
     }
 
