@@ -1,6 +1,8 @@
 import { BlockMutator } from './block-mutator';
 import { Block } from './block';
 
+declare var Blockly: any;
+
 export abstract class CustomBlock extends Block {
 
     private _block: any;
@@ -19,6 +21,10 @@ export abstract class CustomBlock extends Block {
     }
 
     public abstract defineBlock();
+
+    public onChange(changeEvent: any) {
+        // nothing to do
+    }
 
     public toXML(): string {
         return `<block type="${this.type}"></block>`;

@@ -204,18 +204,17 @@ Toolbox Generator
 
 
     constructor(ngxToolboxBuilder: NgxToolboxBuilderService) {
-        const customCategories: Category[] = [
-            new Category(this.customBlocks, '#FF00FF', 'CustomCategory', null)
+        ngxToolboxBuilder.categories = [
+                   new Category(this.customBlocks, '#FF00FF', 'Test', null),
+                   LOGIC_CATEGORY,
+                   LOOP_CATEGORY,
+                   MATH_CATEGORY,
+                   TEXT_CATEGORY,
+                   LISTS_CATEGORY,
+                   COLOUR_CATEGORY,
+                   VARIABLES_CATEGORY,
+                   FUNCTIONS_CATEGORY
         ];
-        ngxToolboxBuilder.customCategories = customCategories;
-        ngxToolboxBuilder.logicOperators = true;
-        ngxToolboxBuilder.loopOperators = true;
-        ngxToolboxBuilder.mathOperators = true;
-        ngxToolboxBuilder.textOperators = true;
-        ngxToolboxBuilder.listOperators = true;
-        ngxToolboxBuilder.colourOperators = true;
-        ngxToolboxBuilder.variableOperators = true;
-        ngxToolboxBuilder.functionOperators = true;
         this.config.toolbox = ngxToolboxBuilder.build();
     }
 ```
