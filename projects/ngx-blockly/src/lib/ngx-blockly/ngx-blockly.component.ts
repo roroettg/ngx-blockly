@@ -100,9 +100,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit {
     }
 
     private onWorkspaceChange($event: any) {
-        if ($event.type === 'move' || $event.type === 'delete') {
-            this.workspaceToCode($event.workspaceId);
-        }
+        this.workspaceToCode($event.workspaceId);
     }
 
     private workspaceToCode(workspaceId: string) {
