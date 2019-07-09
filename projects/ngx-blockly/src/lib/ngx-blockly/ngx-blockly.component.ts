@@ -40,28 +40,28 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit {
                 };
                 if (typeof Blockly.Dart !== 'undefined') {
                     Blockly.Dart[block.type] = function (blocklyBlock) {
-                        return block.toDartCode();
+                        return block.toDartCode(this);
                     };
                 }
 
                 if (typeof Blockly.JavaScript !== 'undefined') {
                     Blockly.JavaScript[block.type] = function (blocklyBlock) {
-                        return block.toJavaScriptCode();
+                        return block.toJavaScriptCode(this);
                     };
                 }
                 if (typeof Blockly.Lua !== 'undefined') {
                     Blockly.Lua[block.type] = function (blocklyBlock) {
-                        return block.toLuaCode();
+                        return block.toLuaCode(this);
                     };
                 }
                 if (typeof Blockly.PHP !== 'undefined') {
                     Blockly.PHP[block.type] = function (blocklyBlock) {
-                        return block.toPHPCode();
+                        return block.toPHPCode(this);
                     };
                 }
                 if (typeof Blockly.Python !== 'undefined') {
                     Blockly.Python[block.type] = function (blocklyBlock) {
-                        return block.toPythonCode();
+                        return block.toPythonCode(this);
                     };
                 }
 

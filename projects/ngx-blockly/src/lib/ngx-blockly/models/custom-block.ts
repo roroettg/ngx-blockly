@@ -30,23 +30,23 @@ export abstract class CustomBlock extends Block {
         return `<block type="${this.type}"></block>`;
     }
 
-    public toDartCode(): string | any[] {
+    public toDartCode(block: any): string | any[] {
         return 'Not implemented';
     }
 
-    public toJavaScriptCode(): string | any[] {
+    public toJavaScriptCode(block: any): string | any[] {
         return 'Not implemented';
     }
 
-    public toLuaCode(): string | any[] {
+    public toLuaCode(block: any): string | any[] {
         return 'Not implemented';
     }
 
-    public toPHPCode(): string | any[] {
+    public toPHPCode(block: any): string | any[] {
         return 'Not implemented';
     }
 
-    public toPythonCode(): string | any[] {
+    public toPythonCode(block: any): string | any[] {
         return 'Not implemented';
     }
 
