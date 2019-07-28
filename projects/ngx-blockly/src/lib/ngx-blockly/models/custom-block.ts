@@ -16,7 +16,7 @@ export abstract class CustomBlock extends Block {
     }
 
     public init(block: any) {
-        this.block = block;
+        this._block = block;
         this.defineBlock();
     }
 
