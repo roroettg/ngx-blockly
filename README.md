@@ -221,9 +221,6 @@ Toolbox Generator
 
 ### Custom Block
 ```typescript
-import { CustomBlock } from '../../../projects/ngx-blockly/src/lib/ngx-blockly/models/custom-block';
-import { BlockMutator } from '../../../projects/ngx-blockly/src/lib/ngx-blockly/models/block-mutator';
-
 declare var Blockly: any;
 
 export class TestBlock extends CustomBlock {
@@ -237,7 +234,7 @@ export class TestBlock extends CustomBlock {
     defineBlock() {
         this.block.appendDummyInput()
             .appendField(this.type)
-            .appendField(new Blockly.FieldImage('assets/Fischertechnik_Taster.png', 50, 50, '*'));
+            .appendField(new Blockly.FieldImage('assets/testblock.png', 50, 50, '*'));
         this.block.setOutput(true, 'Input');
         this.block.setColour(30);
         this.block.setTooltip('');
