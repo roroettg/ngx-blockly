@@ -218,6 +218,10 @@ Toolbox Generator
         this.config.toolbox = ngxToolboxBuilder.build();
     }
 ```
+```html
+    # do not forget to add your customblocks
+   <ngx-blockly [config]="config" [customBlocks]="customBlocks" [generatorConfig]="generatorConfig"  (javascriptCode)="onCode($event)"></ngx-blockly>
+```
 
 ### Custom Block
 ```typescript
