@@ -6,12 +6,20 @@ export class Category {
     private _colour: string;
     private _name: string;
     private _custom: string;
+    private _style: string;
 
-    constructor(blocks: Block[], colour: string, name: string, custom: string) {
+    constructor(
+        blocks: Block[], 
+        colour: string, 
+        name: string, 
+        custom: string, 
+        style?: string
+    ) {
         this._blocks = blocks;
         this._colour = colour;
         this._name = name;
         this._custom = custom;
+        this._style = style;
     }
 
     get blocks(): Block[] {
@@ -46,8 +54,23 @@ export class Category {
         this._custom = value;
     }
 
+    get style(): string {
+        return this._style;
+    }
+
+    set style(value: string) {
+        this._style = value;
+    }
+
     public toXML(): string {
-        let xml = `<category name="${this.name}" colour="${this.colour}"`;
+        let xml = `<category name="${this.name}" `;
+
+        if (this.style === undefined) {
+            xml += `colour="${this.colour}" `
+        } else {
+            xml += `categorystyle="${this.style}" `
+        }
+
         xml += this.custom ? ` custom="${this.custom}">` : '>';
         for (const block of this.blocks) {
             xml += block.toXML();
