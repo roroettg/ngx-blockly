@@ -66,9 +66,9 @@ export class Category {
         let xml = `<category name="${this.name}" `;
 
         if (this.style === undefined) {
-            xml += `colour="${this.colour}" `
+            xml += `colour="${this.colour}" `;
         } else {
-            xml += `categorystyle="${this.style}" `
+            xml += `categorystyle="${this.style}" `;
         }
 
         xml += this.custom ? ` custom="${this.custom}">` : '>';
