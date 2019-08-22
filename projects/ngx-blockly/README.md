@@ -255,6 +255,49 @@ export class TestBlock extends CustomBlock {
 }
 ```
 
+### Theme
+Customized theme can be specified in the `theme` option for `NgxBlocklyConfig`, and the format of the block style and category style is stated in the [Themes](https://developers.google.com/blockly/guides/configure/web/themes).
 
+Sample theme class (Using Google Blockly [Classic theme](https://github.com/google/blockly/blob/master/core/theme/classic.js)):
+```typescript
+export const blockStyles: BlockStyles = {
+  logic_blocks: {
+    colourPrimary: '210',
+  },
+};
 
+export const categoryStyles: CategoryStyles = {
+  logic_category: {
+    colour: '210',
+  },
+}
 
+export const ClassicTheme: Theme = new Theme (
+  blockStyles,
+  categoryStyles
+)
+```
+
+When you have specified the theme used in Blockly workspace, you need to declare the corresponding block style/category style in block/category definition. Noted that once you have defined the theme option in `NgxBlocklyConfig`, then you need to manage color scheme of all blocks and categories.
+
+Block Styling
+```typescript
+{
+  "type": "controls_if",
+  "style": "logic_blocks", // Specify the block style to apply
+}
+```
+
+Category Styling
+```xml
+<!-- Specify the category style to apply -->
+<category name="Logic" categorystyle="logic_category">
+</category>
+```
+
+Corresponding NgxBlocklyConfig
+```typescript
+config: NgxBlocklyConfig = {
+    theme: ClassicTheme.createBlocklyTheme(),
+  };
+```
