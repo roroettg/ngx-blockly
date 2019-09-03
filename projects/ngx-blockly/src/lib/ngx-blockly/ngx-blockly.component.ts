@@ -39,28 +39,28 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit {
                     }
                 };
                 if (typeof Blockly.Dart !== 'undefined') {
-                    Blockly.Dart[block.type] = function (blocklyBlock) {
+                    Blockly.Dart[block.type] = function () {
                         return block.toDartCode(this);
                     };
                 }
 
                 if (typeof Blockly.JavaScript !== 'undefined') {
-                    Blockly.JavaScript[block.type] = function (blocklyBlock) {
+                    Blockly.JavaScript[block.type] = function () {
                         return block.toJavaScriptCode(this);
                     };
                 }
                 if (typeof Blockly.Lua !== 'undefined') {
-                    Blockly.Lua[block.type] = function (blocklyBlock) {
+                    Blockly.Lua[block.type] = function () {
                         return block.toLuaCode(this);
                     };
                 }
                 if (typeof Blockly.PHP !== 'undefined') {
-                    Blockly.PHP[block.type] = function (blocklyBlock) {
+                    Blockly.PHP[block.type] = function () {
                         return block.toPHPCode(this);
                     };
                 }
                 if (typeof Blockly.Python !== 'undefined') {
-                    Blockly.Python[block.type] = function (blocklyBlock) {
+                    Blockly.Python[block.type] = function () {
                         return block.toPythonCode(this);
                     };
                 }
@@ -94,16 +94,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit {
         setTimeout(() => this.resize(), 200);
     }
 
-    protected resize() {
-        Blockly.svgResize(this.workspace);
-
-    }
-
-    private onWorkspaceChange($event: any) {
-        this.workspaceToCode($event.workspaceId);
-    }
-
-    private workspaceToCode(workspaceId: string) {
+    public workspaceToCode(workspaceId: string) {
         if (this.generatorConfig.dart) {
             this.dartCode.emit(Blockly.Dart.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
         }
@@ -119,6 +110,15 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit {
         if (this.generatorConfig.python) {
             this.pythonCode.emit(Blockly.Python.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
         }
+    }
+
+    protected resize() {
+        Blockly.svgResize(this.workspace);
+
+    }
+
+    private onWorkspaceChange($event: any) {
+        this.workspaceToCode($event.workspaceId);
     }
 
 }
