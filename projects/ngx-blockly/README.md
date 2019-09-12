@@ -224,7 +224,7 @@ Toolbox Generator
 import { CustomBlock } from '../../../projects/ngx-blockly/src/lib/ngx-blockly/models/custom-block';
 import { BlockMutator } from '../../../projects/ngx-blockly/src/lib/ngx-blockly/models/block-mutator';
 
-declare var Blockly: any;
+import * as Blockly from 'blockly/core';
 
 export class TestBlock extends CustomBlock {
 

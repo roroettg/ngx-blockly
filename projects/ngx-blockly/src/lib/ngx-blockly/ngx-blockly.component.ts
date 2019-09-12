@@ -2,7 +2,6 @@ import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnInit, Ou
 import { NgxBlocklyConfig } from './ngx-blockly.config';
 import { NgxBlocklyGeneratorConfig } from './ngx-blockly-generator.config';
 import { CustomBlock } from './models/custom-block';
-
 declare var Blockly: any;
 
 @Component({
@@ -28,50 +27,49 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {
         if (this.customBlocks) {
-            for (const block of this.customBlocks) {
-                Blockly.Blocks[block.type] = {
+            for (const customBlock of this.customBlocks) {
+                Blockly.Blocks[customBlock.type] = {
                     init: function () {
-                        const blockInstance = new block.class(block.type, this, block.blockMutator);
-                        blockInstance.init(this);
-                        this.setOnChange((changeEvent) => {
-                            blockInstance.onChange(changeEvent);
-                        });
+                        const block = new customBlock.class(customBlock.type, this, customBlock.blockMutator);
+                        block.init(this);
+                        this.mixin({
+                                blockInstance: block
+                            }
+                        );
                     }
                 };
-                if (typeof Blockly.Dart !== 'undefined') {
-                    Blockly.Dart[block.type] = function () {
-                        return block.toDartCode(this);
+                if (typeof Blockly.Python !== 'undefined') {
+                    Blockly.Python[customBlock.type] = function (b) {
+                        return b.blockInstance.toPythonCode(b);
                     };
                 }
-
+                if (typeof Blockly.Dart !== 'undefined') {
+                    Blockly.Dart[customBlock.type] = function (b) {
+                        return b.blockInstance.toDartCode(b);
+                    };
+                }
                 if (typeof Blockly.JavaScript !== 'undefined') {
-                    Blockly.JavaScript[block.type] = function () {
-                        return block.toJavaScriptCode(this);
+                    Blockly.JavaScript[customBlock.type] = function (b) {
+                        return b.blockInstance.toJavaScriptCode(b);
                     };
                 }
                 if (typeof Blockly.Lua !== 'undefined') {
-                    Blockly.Lua[block.type] = function () {
-                        return block.toLuaCode(this);
+                    Blockly.Lua[customBlock.type] = function (b) {
+                        return b.blockInstance.toLuaCode(b);
                     };
                 }
                 if (typeof Blockly.PHP !== 'undefined') {
-                    Blockly.PHP[block.type] = function () {
-                        return block.toPHPCode(this);
+                    Blockly.PHP[customBlock.type] = function (b) {
+                        return b.blockInstance.toPHPCode(b);
                     };
                 }
-                if (typeof Blockly.Python !== 'undefined') {
-                    Blockly.Python[block.type] = function () {
-                        return block.toPythonCode(this);
-                    };
-                }
-
-                if (block.blockMutator) {
-                    Blockly.Extensions.registerMutator(block.blockMutator.name, {
+                if (customBlock.blockMutator) {
+                    Blockly.Extensions.registerMutator(customBlock.blockMutator.name, {
                         mutationToDom: function () {
-                            return block.blockMutator.mutationToDom();
+                            return this.blockInstance.blockMutator.mutationToDom();
                         },
                         domToMutation: function (xmlElement: any) {
-                            block.blockMutator.domToMutation(xmlElement);
+                            this.blockInstance.blockMutator.domToMutation(xmlElement);
                         }
                     });
                 }
@@ -96,7 +94,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit {
 
     public workspaceToCode(workspaceId: string) {
         if (this.generatorConfig.dart) {
-            this.dartCode.emit(Blockly.Dart.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
+           this.dartCode.emit(Blockly.Dart.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
         }
         if (this.generatorConfig.javascript) {
             this.javascriptCode.emit(Blockly.JavaScript.workspaceToCode(Blockly.Workspace.getById(workspaceId)));

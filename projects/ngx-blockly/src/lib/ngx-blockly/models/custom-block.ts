@@ -18,6 +18,9 @@ export abstract class CustomBlock extends Block {
     public init(block: any) {
         this._block = block;
         this.defineBlock();
+        this.block.setOnChange(function (event) {
+            this.blockInstance.onChange(event);
+        });
     }
 
     public abstract defineBlock();
@@ -30,23 +33,23 @@ export abstract class CustomBlock extends Block {
         return `<block type="${this.type}"></block>`;
     }
 
-    public toDartCode(block: any): string | any[] {
+    public toDartCode(block: CustomBlock): string | any[] {
         return 'Not implemented';
     }
 
-    public toJavaScriptCode(block: any): string | any[] {
+    public toJavaScriptCode(block: CustomBlock): string | any[] {
         return 'Not implemented';
     }
 
-    public toLuaCode(block: any): string | any[] {
+    public toLuaCode(block: CustomBlock): string | any[] {
         return 'Not implemented';
     }
 
-    public toPHPCode(block: any): string | any[] {
+    public toPHPCode(block: CustomBlock): string | any[] {
         return 'Not implemented';
     }
 
-    public toPythonCode(block: any): string | any[] {
+    public toPythonCode(block: CustomBlock): string | any[] {
         return 'Not implemented';
     }
 

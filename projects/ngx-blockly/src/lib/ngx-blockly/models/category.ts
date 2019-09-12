@@ -9,10 +9,10 @@ export class Category {
     private _style: string;
 
     constructor(
-        blocks: Block[], 
-        colour: string, 
-        name: string, 
-        custom: string, 
+        blocks: Block[],
+        colour: string,
+        name: string,
+        custom: string,
         style?: string
     ) {
         this._blocks = blocks;

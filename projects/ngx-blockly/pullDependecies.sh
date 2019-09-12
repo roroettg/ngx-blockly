@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export BLOCKLY_VERSION="1.20190419.0"
+export BLOCKLY_VERSION="2.20190722.1"
 
 rm -rf ./src/scripts/blockly/
 
