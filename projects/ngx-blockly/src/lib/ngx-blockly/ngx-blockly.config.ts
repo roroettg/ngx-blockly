@@ -14,7 +14,7 @@ export class NgxBlocklyConfig {
     maxInstances?: object; // Map from block types to maximum number of blocks of that type that may be created. Undeclared types default to Infinity.
     media?: string; // Path from page (or frame) to the Blockly media directory. Defaults to "https://blockly-demo.appspot.com/static/media/"
     oneBasedIndex?: boolean; // If true list and string operations should index from 1, if false index from 0. Defaults to true.
-    readonly?: boolean; // If true, prevent the user from editing. Supresses the toolbox and trashcan. Defaults to false.
+    readOnly?: boolean; // If true, prevent the user from editing. Supresses the toolbox and trashcan. Defaults to false.
     rtl?: boolean; // If true, mirror the editor (for Arabic or Hebrew locales). Defaults to false.
     scrollbars?: boolean; // Sets whether the workspace is scrollable or not. Defaults to true if the toolbox has categories, false otherwise
     sounds?: boolean; // If false, don't play sounds (e.g. click and delete). Defaults to true.
