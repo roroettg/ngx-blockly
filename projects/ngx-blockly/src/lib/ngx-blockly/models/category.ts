@@ -1,12 +1,13 @@
 import { Block } from './block';
+import { Node } from './tree-node';
 
-export class Category {
+export class Category implements Node{
 
-    private _blocks: Block[] = [];
-    private _colour: string;
-    private _name: string;
-    private _custom: string;
-    private _style: string;
+    protected _blocks: Block[] = [];
+    protected _colour: string;
+    protected _name: string;
+    protected _custom: string;
+    protected _style: string;
 
     constructor(
         blocks: Block[],

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Category } from '../models/category';
 import { XmlBlock } from '../models/xml-block';
+import { Node } from '../models/tree-node';
 
 export const LOGIC_CATEGORY: Category = new Category([
     new XmlBlock('controls_if'),
@@ -81,24 +82,24 @@ export const FUNCTIONS_CATEGORY: Category = new Category([], '%{BKY_PROCEDURES_H
 @Injectable()
 export class NgxToolboxBuilderService {
 
-    private _categories: Category[];
+    private _nodes: Node[];
 
     public build(): string {
         let xml = '<xml id="toolbox" style="display: none">';
-        if (this.categories) {
-            for (const category of this.categories) {
-                xml += category.toXML();
+        if (this._nodes) {
+            for (const node of this._nodes) {
+                xml += node.toXML();
             }
         }
         xml += '</xml>';
         return xml;
     }
 
-    get categories(): Category[] {
-        return this._categories;
+    get nodes(): Node[] {
+        return this._nodes;
     }
 
-    set categories(value: Category[]) {
-        this._categories = value;
+    set nodes(value: Node[]) {
+        this._nodes = value;
     }
 }
