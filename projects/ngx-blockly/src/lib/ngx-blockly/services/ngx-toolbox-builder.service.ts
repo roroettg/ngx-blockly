@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Category } from '../models/category';
 import { XmlBlock } from '../models/xml-block';
-import { Node } from '../models/tree-node';
+import { Node } from '../models/node';
 
 export const LOGIC_CATEGORY: Category = new Category([
     new XmlBlock('controls_if'),
