@@ -128,6 +128,7 @@ export class NgxBlocklyGeneratorConfig {
     lua?: boolean;
     php?: boolean;
     python?: boolean;
+    xml?: boolean
 }
 
 ```
@@ -164,6 +165,7 @@ export class AppComponent {
         lua: true,
         php: true,
         python: true,
+        xml: true
     };
 
     onCode(code: string) {
@@ -175,6 +177,16 @@ export class AppComponent {
 ```html
 <ngx-blockly [config]="config" [generatorConfig]="generatorConfig" (javascriptCode)="onCode($event)" (pythonCode)="onCode($event)"></ngx-blockly>
 
+```
+### Import/Export Blockly Project
+```
+    @ViewChild(NgxBlocklyComponent) workspace;
+
+    // Returns formatted xml of workspace
+    this.workspace.toXml();
+
+    // Imports xml to workspace
+    this.workspace.fromXml(xml);
 ```
 
 ### Blockly Toolbox

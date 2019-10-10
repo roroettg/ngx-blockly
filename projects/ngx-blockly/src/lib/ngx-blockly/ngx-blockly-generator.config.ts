@@ -4,4 +4,5 @@ export class NgxBlocklyGeneratorConfig {
     lua?: boolean;
     php?: boolean;
     python?: boolean;
+    xml?: boolean;
 }

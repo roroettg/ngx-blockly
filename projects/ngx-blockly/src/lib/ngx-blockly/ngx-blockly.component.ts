@@ -19,6 +19,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit {
     @Output() public luaCode: EventEmitter<string> = new EventEmitter<string>();
     @Output() public phpCode: EventEmitter<string> = new EventEmitter<string>();
     @Output() public pythonCode: EventEmitter<string> = new EventEmitter<string>();
+    @Output() public xmlCode: EventEmitter<string> = new EventEmitter<string>();
 
     public workspace: any;
 
@@ -108,6 +109,17 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit {
         if (this.generatorConfig.python) {
             this.pythonCode.emit(Blockly.Python.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
         }
+        if (this.generatorConfig.xml) {
+            this.xmlCode.emit(Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.Workspace.getById(workspaceId))));
+        }
+    }
+
+    public toXml(): string {
+        return Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(this.workspace));
+    }
+
+    public fromXml(xml: string) {
+        Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), this.workspace);
     }
 
     protected resize() {
