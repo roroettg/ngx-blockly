@@ -185,8 +185,11 @@ export class AppComponent {
     // Returns formatted xml of workspace
     this.workspace.toXml();
 
-    // Imports xml to workspace
+    // Add xml to workspace (clears previous elements)
     this.workspace.fromXml(xml);
+
+    // Append xml to workspace
+    this.workspace.appendFromXml(xml);
 ```
 
 ### Blockly Toolbox

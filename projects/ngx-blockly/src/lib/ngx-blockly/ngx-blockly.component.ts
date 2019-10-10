@@ -119,7 +119,11 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit {
     }
 
     public fromXml(xml: string) {
-        Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), this.workspace);
+        Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.textToDom(xml), this.workspace);
+    }
+
+    public appendFromXml(xml: string) {
+        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(xml), this.workspace);
     }
 
     protected resize() {
