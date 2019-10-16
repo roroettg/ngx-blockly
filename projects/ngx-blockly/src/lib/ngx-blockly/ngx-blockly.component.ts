@@ -2,6 +2,7 @@ import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnInit, Ou
 import { NgxBlocklyConfig } from './ngx-blockly.config';
 import { NgxBlocklyGeneratorConfig } from './ngx-blockly-generator.config';
 import { CustomBlock } from './models/custom-block';
+
 declare var Blockly: any;
 
 @Component({
@@ -14,6 +15,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit {
     @Input() public config: NgxBlocklyConfig = {};
     @Input() public generatorConfig: NgxBlocklyGeneratorConfig = {};
     @Input() public customBlocks: CustomBlock[] = [];
+    @Output() public workspaceChange: EventEmitter<any> = new EventEmitter<any>();
     @Output() public dartCode: EventEmitter<string> = new EventEmitter<string>();
     @Output() public javascriptCode: EventEmitter<string> = new EventEmitter<string>();
     @Output() public luaCode: EventEmitter<string> = new EventEmitter<string>();
@@ -132,6 +134,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit {
     }
 
     private onWorkspaceChange($event: any) {
+        this.workspaceChange.emit($event);
         this.workspaceToCode($event.workspaceId);
     }
 
