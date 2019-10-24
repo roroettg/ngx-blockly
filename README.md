@@ -225,7 +225,7 @@ Toolbox Generator
                    LOOP_CATEGORY,
                    MATH_CATEGORY,
                    TEXT_CATEGORY,
-                   new Seperator(), //Add Seperator
+                   new Separator(), //Add Separator
                    LISTS_CATEGORY,
                    COLOUR_CATEGORY,
                    VARIABLES_CATEGORY,
@@ -246,8 +246,8 @@ declare var Blockly: any;
 export class TestBlock extends CustomBlock {
 
 
-    constructor(type: string, block: any, blockMutator: BlockMutator) {
-        super(type, block, blockMutator);
+    constructor(type: string, block: any, blockMutator: BlockMutator, ...args: any[]) {
+        super(type, block, blockMutator, ...args);
         this.class = TestBlock;
     }
 
@@ -255,6 +255,7 @@ export class TestBlock extends CustomBlock {
         this.block.appendDummyInput()
             .appendField(this.type)
             .appendField(new Blockly.FieldImage('assets/testblock.png', 50, 50, '*'));
+            .appendField(new Blockly.FieldImage(this.args[0], 50, 50, '*'));
         this.block.setOutput(true, 'Input');
         this.block.setColour(30);
         this.block.setTooltip('');
@@ -271,6 +272,7 @@ export class TestBlock extends CustomBlock {
     }
 }
 ```
+
 
 
 ### Theme

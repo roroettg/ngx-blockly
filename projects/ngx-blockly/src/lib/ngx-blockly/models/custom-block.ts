@@ -7,12 +7,14 @@ export abstract class CustomBlock extends Block {
 
     private _block: any;
     private _blockMutator: BlockMutator;
+    private _args: any[];
 
 
-    constructor(type: string, block: any, blockMutator: BlockMutator) {
+    constructor(type: string, block: any, blockMutator: BlockMutator, ...args: any[]) {
         super(type);
         this._block = block;
         this._blockMutator = blockMutator;
+        this._args = args;
     }
 
     public init(block: any) {
@@ -67,5 +69,13 @@ export abstract class CustomBlock extends Block {
 
     set blockMutator(value: BlockMutator) {
         this._blockMutator = value;
+    }
+
+    get args(): any[] {
+        return this._args;
+    }
+
+    set args(value: any[]) {
+        this._args = value;
     }
 }
