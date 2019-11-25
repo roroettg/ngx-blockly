@@ -12,10 +12,7 @@ export abstract class BlockMutator {
 
     public abstract decompose(workspace: any);
 
-    public abstract compose();
-
-
-
+    public abstract compose(topBlock: any);
 
     get name(): string {
         return this._name;
