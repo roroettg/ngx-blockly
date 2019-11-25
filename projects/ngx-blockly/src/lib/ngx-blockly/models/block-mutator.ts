@@ -10,6 +10,13 @@ export abstract class BlockMutator {
 
     public abstract domToMutation(xml: any);
 
+    public abstract decompose(workspace: any);
+
+    public abstract compose();
+
+
+
+
     get name(): string {
         return this._name;
     }
