@@ -6,7 +6,7 @@ export abstract class BlockMutator {
         this._name = name;
     }
 
-    public abstract mutationToDom();
+    public abstract mutationToDom(block: any);
 
     public abstract domToMutation(xml: any);
 
