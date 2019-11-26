@@ -8,7 +8,7 @@ export abstract class BlockMutator {
 
     public abstract mutationToDom(block: any);
 
-    public abstract domToMutation(xml: any);
+    public abstract domToMutation(xml: any, block: any);
 
     public abstract decompose(workspace: any);
 
