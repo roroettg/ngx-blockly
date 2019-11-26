@@ -79,6 +79,9 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit {
                         },
                         compose: function(topBlock: any) {
                           return this.blockInstance.blockMutator.compose(topBlock);
+                        },
+                        saveConnections: function(containerBlock: any) {
+                          return this.blockInstance.blockMutator.saveConnections(containerBlock)
                         }
                     });
                 }
