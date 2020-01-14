@@ -8,11 +8,13 @@ export abstract class BlockMutator {
 
     public abstract mutationToDom();
 
-    public abstract domToMutation(xml: any);
+    public abstract domToMutation(xmlElement: any);
 
     public abstract decompose(workspace: any);
 
-    public abstract compose();
+    public abstract compose(topBlock: any);
+
+    public abstract saveConnections(containerBlock: any);
 
     get name(): string {
         return this._name;

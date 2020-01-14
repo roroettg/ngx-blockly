@@ -77,10 +77,10 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit {
                         decompose: function(workspace: any) {
                             return this.blockInstance.blockMutator.decompose(workspace);
                         },
-                        compose: function(topBlock) {
+                        compose: function(topBlock: any) {
                             this.blockInstance.blockMutator.compose(topBlock);
                         },
-                        saveConnections: function(containerBlock) {
+                        saveConnections: function(containerBlock: any) {
                             this.blockInstance.blockMutator.saveConnections(containerBlock);
                         }
                     });
