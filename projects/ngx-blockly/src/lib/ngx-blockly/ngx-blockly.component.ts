@@ -67,23 +67,33 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit {
                     };
                 }
                 if (customBlock.blockMutator) {
-                    Blockly.Extensions.registerMutator(customBlock.blockMutator.name, {
+                    const mutator_mixin: any = {
                         mutationToDom: function () {
-                            return this.blockInstance.blockMutator.mutationToDom();
+                            return customBlock.blockMutator.mutationToDom.call(customBlock.blockMutator, this);
                         },
                         domToMutation: function (xmlElement: any) {
-                            this.blockInstance.blockMutator.domToMutation(xmlElement);
-                        },
-                        decompose: function(workspace: any) {
-                            return this.blockInstance.blockMutator.decompose(workspace);
-                        },
-                        compose: function(topBlock: any) {
-                            this.blockInstance.blockMutator.compose(topBlock);
-                        },
-                        saveConnections: function(containerBlock: any) {
-                            this.blockInstance.blockMutator.saveConnections(containerBlock);
+                            customBlock.blockMutator.domToMutation.call(customBlock.blockMutator, this);
                         }
-                    });
+                    };
+                    if (customBlock.blockMutator.blockList && customBlock.blockMutator.blockList.length > 0) {
+                        mutator_mixin.decompose = function(workspace: any) {
+                            return customBlock.blockMutator.decompose.call(customBlock.blockMutator, this, workspace);
+                        };
+                        mutator_mixin.compose = function(topBlock: any) {
+                            customBlock.blockMutator.compose.call(customBlock.blockMutator, this, topBlock);
+                        };
+                        mutator_mixin.saveConnections = function(containerBlock: any) {
+                            customBlock.blockMutator.saveConnections.call(customBlock.blockMutator, this, containerBlock);
+                        };
+                    }
+                    Blockly.Extensions.registerMutator(
+                        customBlock.blockMutator.name,
+                        mutator_mixin,
+                        function() {
+                            customBlock.blockMutator.afterBlockInit.call(customBlock.blockMutator, this);
+                        },
+                        customBlock.blockMutator.blockList
+                    );
                 }
             }
         }

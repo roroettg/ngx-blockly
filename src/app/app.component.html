@@ -1,1 +1,6 @@
-<ngx-blockly [config]="config" [generatorConfig]="generatorConfig" (javascriptCode)="onCode($event)"></ngx-blockly>
+<ngx-blockly 
+    [config]="config" 
+    [generatorConfig]="generatorConfig" 
+    [customBlocks]="customBlocks"
+    (javascriptCode)="onCode($event)">
+</ngx-blockly>
