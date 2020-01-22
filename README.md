@@ -266,6 +266,26 @@ export class TestBlock extends CustomBlock {
         return '<block type="test"></block>';
     }
 
+    toDartCode(block: CustomBlock): string | any[] {
+        return 'Not implemented';
+    }
+
+    toJavaScriptCode(block: CustomBlock): string | any[] {
+        return 'Not implemented';
+    }
+
+    toLuaCode(block: CustomBlock): string | any[] {
+        return 'Not implemented';
+    }
+
+    toPHPCode(block: CustomBlock): string | any[] {
+        return 'Not implemented';
+    }
+
+    toPythonCode(block: CustomBlock): string | any[] {
+        return 'Not implemented';
+    }
+
 
     onChange(changeEvent: any) {
         console.log(changeEvent);
