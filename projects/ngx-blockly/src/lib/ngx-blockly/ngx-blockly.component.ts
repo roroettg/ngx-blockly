@@ -72,7 +72,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit {
                             return customBlock.blockMutator.mutationToDom.call(customBlock.blockMutator, this);
                         },
                         domToMutation: function (xmlElement: any) {
-                            customBlock.blockMutator.domToMutation.call(customBlock.blockMutator, this);
+                            customBlock.blockMutator.domToMutation.call(customBlock.blockMutator, this, xmlElement);
                         }
                     };
                     if (customBlock.blockMutator.blockList && customBlock.blockMutator.blockList.length > 0) {
