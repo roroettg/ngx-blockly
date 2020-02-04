@@ -3,22 +3,23 @@ import { Node } from './node';
 
 export class Category implements Node {
 
-    private _blocks: Block[] = [];
+    private _blocks: Block[];
+    private _categories: Category[];
     private _colour: string;
     private _name: string;
     private _custom: string;
     private _style: string;
 
-    constructor(
-        blocks: Block[],
-        colour: string,
-        name: string,
-        custom: string,
-        style?: string
-    ) {
-        this._blocks = blocks;
-        this._colour = colour;
+    constructor(name: string,
+                colour: string,
+                blocks?: Block[],
+                categories?: Category[],
+                custom?: string,
+                style?: string) {
         this._name = name;
+        this._colour = colour;
+        this._blocks = blocks ? blocks : [];
+        this._categories = categories ? categories : [];
         this._custom = custom;
         this._style = style;
     }
@@ -29,6 +30,14 @@ export class Category implements Node {
 
     set blocks(value: Block[]) {
         this._blocks = value;
+    }
+
+    get categories(): Category[] {
+        return this._categories;
+    }
+
+    set categories(value: Category[]) {
+        this._categories = value;
     }
 
     get colour(): string {
@@ -64,16 +73,21 @@ export class Category implements Node {
     }
 
     public toXML(): string {
-        let xml = `<category name="${this.name}" `;
+        let xml = `<category name="${this._name}" `;
 
         if (this.style === undefined) {
-            xml += `colour="${this.colour}" `;
+            xml += `colour="${this._colour}" `;
         } else {
-            xml += `categorystyle="${this.style}" `;
+            xml += `categorystyle="${this._style}" `;
         }
 
-        xml += this.custom ? ` custom="${this.custom}">` : '>';
-        for (const block of this.blocks) {
+        xml += this.custom ? ` custom="${this._custom}">` : '>';
+
+        for (const category of this._categories) {
+            xml += category.toXML();
+        }
+
+        for (const block of this._blocks) {
             xml += block.toXML();
         }
         xml += '</category>';

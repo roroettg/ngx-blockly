@@ -220,7 +220,7 @@ Toolbox Generator
 
     constructor(ngxToolboxBuilder: NgxToolboxBuilderService) {
         ngxToolboxBuilder.nodes = [
-                   new Category(this.customBlocks, '#FF00FF', 'Test', null),
+                   new Category('Test', '#FF00FF',this.customBlocks, null),
                    LOGIC_CATEGORY,
                    LOOP_CATEGORY,
                    MATH_CATEGORY,

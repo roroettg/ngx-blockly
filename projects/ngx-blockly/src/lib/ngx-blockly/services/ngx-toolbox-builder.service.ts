@@ -3,7 +3,7 @@ import { Category } from '../models/category';
 import { XmlBlock } from '../models/xml-block';
 import { Node } from '../models/node';
 
-export const LOGIC_CATEGORY: Category = new Category([
+export const LOGIC_CATEGORY: Category = new Category('Logic', '%{BKY_LOGIC_HUE}', [
     new XmlBlock('controls_if'),
     new XmlBlock('logic_compare'),
     new XmlBlock('logic_operation'),
@@ -11,19 +11,19 @@ export const LOGIC_CATEGORY: Category = new Category([
     new XmlBlock('logic_boolean'),
     new XmlBlock('logic_null'),
     new XmlBlock('logic_ternary'),
-], '%{BKY_LOGIC_HUE}', 'Logic', null);
+]);
 
-export const LOOP_CATEGORY: Category = new Category([
+export const LOOP_CATEGORY: Category = new Category('Loops', '%{BKY_LOOPS_HUE}', [
     new XmlBlock('controls_repeat_ext'),
     new XmlBlock('controls_whileUntil'),
     new XmlBlock('controls_for'),
     new XmlBlock('controls_forEach'),
     new XmlBlock('controls_flow_statements'),
     new XmlBlock('controls_flow_statements')
-], '%{BKY_LOOPS_HUE}', 'Loops', null);
+]);
 
 
-export const MATH_CATEGORY: Category = new Category([
+export const MATH_CATEGORY: Category = new Category('Math', '%{BKY_MATH_HUE}', [
     new XmlBlock('math_number'),
     new XmlBlock('math_arithmetic'),
     new XmlBlock('math_single'),
@@ -37,9 +37,9 @@ export const MATH_CATEGORY: Category = new Category([
     new XmlBlock('math_random_int'),
     new XmlBlock('math_random_float'),
     new XmlBlock('math_atan2')
-], '%{BKY_MATH_HUE}', 'Math', null);
+]);
 
-export const TEXT_CATEGORY: Category = new Category([
+export const TEXT_CATEGORY: Category = new Category('Text', '%{BKY_TEXTS_HUE}', [
     new XmlBlock('text'),
     new XmlBlock('text_join'),
     new XmlBlock('text_append'),
@@ -51,10 +51,10 @@ export const TEXT_CATEGORY: Category = new Category([
     new XmlBlock('text_changeCase'),
     new XmlBlock('text_trim'),
     new XmlBlock('text_print'),
-    new XmlBlock('text_prompt_ext'),
-], '%{BKY_TEXTS_HUE}', 'Text', null);
+    new XmlBlock('text_prompt_ext')
+]);
 
-export const LISTS_CATEGORY: Category = new Category([
+export const LISTS_CATEGORY: Category = new Category('Lists', '%{BKY_LISTS_HUE}', [
     new XmlBlock('lists_create_with'),
     new XmlBlock('lists_create_with'),
     new XmlBlock('lists_repeat'),
@@ -66,18 +66,18 @@ export const LISTS_CATEGORY: Category = new Category([
     new XmlBlock('lists_getSublist'),
     new XmlBlock('lists_split'),
     new XmlBlock('lists_sort'),
-], '%{BKY_LISTS_HUE}', 'Lists', null);
+]);
 
-export const COLOUR_CATEGORY: Category = new Category([
+export const COLOUR_CATEGORY: Category = new Category('Colours', '%{BKY_COLOUR_HUE}', [
     new XmlBlock('colour_picker'),
     new XmlBlock('colour_random'),
     new XmlBlock('colour_random'),
     new XmlBlock('colour_blend')
-], '%{BKY_COLOUR_HUE}', 'Colours', '');
+]);
 
-export const VARIABLES_CATEGORY: Category = new Category([], '%{BKY_VARIABLES_HUE}', 'Variables', 'VARIABLE');
+export const VARIABLES_CATEGORY: Category = new Category('Variables', '%{BKY_VARIABLES_HUE}', [], [], 'VARIABLE');
 
-export const FUNCTIONS_CATEGORY: Category = new Category([], '%{BKY_PROCEDURES_HUE}', 'Functions', 'PROCEDURE');
+export const FUNCTIONS_CATEGORY: Category = new Category('Functions', '%{BKY_PROCEDURES_HUE}', [], [], 'PROCEDURE');
 
 @Injectable()
 export class NgxToolboxBuilderService {
