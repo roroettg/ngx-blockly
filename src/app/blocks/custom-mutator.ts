@@ -1,6 +1,6 @@
 declare var Blockly: any;
 
-export class CustomMutator extends Blockly.Icon {
+export class CustomMutator extends Blockly.Mutator {
 
     constructor(block) {
         super(block);
