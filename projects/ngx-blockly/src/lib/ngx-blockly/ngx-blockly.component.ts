@@ -86,6 +86,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges {
                             customBlock.blockMutator.saveConnections.call(customBlock.blockMutator, this, containerBlock);
                         };
                     }
+                    Blockly.Extensions.unregister(customBlock.blockMutator.name);
                     Blockly.Extensions.registerMutator(
                         customBlock.blockMutator.name,
                         mutator_mixin,
