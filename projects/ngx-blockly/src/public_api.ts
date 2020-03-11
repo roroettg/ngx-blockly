@@ -10,6 +10,7 @@ export * from './lib/ngx-blockly/models/custom-block';
 export * from './lib/ngx-blockly/models/xml-block';
 export * from './lib/ngx-blockly/models/category';
 export * from './lib/ngx-blockly/models/separator';
+export * from './lib/ngx-blockly/models/theme;
 export * from './lib/ngx-blockly/models/node';
 export * from './lib/ngx-blockly/models/block-mutator';
 export * from './lib/ngx-blockly/services/ngx-toolbox-builder.service';
