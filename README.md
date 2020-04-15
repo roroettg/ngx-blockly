@@ -312,9 +312,21 @@ export const categoryStyles: CategoryStyles = {
   },
 }
 
-export const ClassicTheme: Theme = new Theme (
+export const componentStyle: ComponentStyle = {
+   workspaceBackgroundColour: '#ff0000',
+   toolboxBackgroundColour: '#00ff00',
+   scrollbarColour: '#eeff33',
+   insertionMarkerColour: '#FF0000',
+   flyoutBackgroundColour: '#aaa000',
+   flyoutOpacity: 1
+   # See docs fore more options
+}
+
+export const exampleTheme: Theme = new Theme (
+  'ThemeName',
   blockStyles,
-  categoryStyles
+  categoryStyles,
+  componentStyle
 )
 ```
 
@@ -338,6 +350,6 @@ Category Styling
 Corresponding NgxBlocklyConfig
 ```typescript
 config: NgxBlocklyConfig = {
-    theme: ClassicTheme.createBlocklyTheme(),
+    theme: exampleTheme.createBlocklyTheme(),
   };
 ```
