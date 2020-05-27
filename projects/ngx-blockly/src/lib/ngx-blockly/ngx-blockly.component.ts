@@ -24,9 +24,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges {
     @Output() public xmlCode: EventEmitter<string> = new EventEmitter<string>();
 
     public workspace: any;
-
-    constructor() {
-    }
+    private _xmlString = null;
 
     ngOnInit(): void {
         if (this.customBlocks) {
@@ -131,8 +129,11 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges {
         if (this.generatorConfig.python) {
             this.pythonCode.emit(Blockly.Python.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
         }
-        if (this.generatorConfig.xml) {
-            this.xmlCode.emit(Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.Workspace.getById(workspaceId))));
+        if (!this.config.readOnly) {
+            this._xmlString = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.Workspace.getById(workspaceId)));
+        }
+        if (this.generatorConfig.xml && this._xmlString) {
+            this.xmlCode.emit(this._xmlString);
         }
     }
 
@@ -141,6 +142,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     public fromXml(xml: string) {
+        this._xmlString = xml;
         Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.textToDom(xml), this.workspace);
     }
 
@@ -153,17 +155,15 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     private _init() {
-        let xml: string;
         if (this.workspace) {
-            xml = this.toXml();
             this.workspace.dispose();
         }
         this.workspace = Blockly.inject('blockly', this.config);
         this.workspace.addChangeListener(($event) => {
             this._onWorkspaceChange($event);
         });
-        if (xml) {
-            this.fromXml(xml);
+        if (this._xmlString) {
+            this.fromXml(this._xmlString);
         }
         this.resize();
     }
