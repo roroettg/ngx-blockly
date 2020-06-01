@@ -31,5 +31,5 @@ export class NgxBlocklyConfig {
         minScale: number,
         scaleSpeed: number
     };
-
+    renderer?: string; // Defaults to geras renderer if no renderer is provided.
 }
