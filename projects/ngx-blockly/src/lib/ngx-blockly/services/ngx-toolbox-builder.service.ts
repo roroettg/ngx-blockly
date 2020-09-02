@@ -22,7 +22,6 @@ export const LOOP_CATEGORY: Category = new Category('Loops', '%{BKY_LOOPS_HUE}',
     new XmlBlock('controls_flow_statements')
 ]);
 
-
 export const MATH_CATEGORY: Category = new Category('Math', '%{BKY_MATH_HUE}', [
     new XmlBlock('math_number'),
     new XmlBlock('math_arithmetic'),

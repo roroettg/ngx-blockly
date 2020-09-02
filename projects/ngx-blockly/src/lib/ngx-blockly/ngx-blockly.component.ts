@@ -2,6 +2,8 @@ import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnInit, Ou
 import { NgxBlocklyConfig } from './ngx-blockly.config';
 import { NgxBlocklyGeneratorConfig } from './ngx-blockly-generator.config';
 import { CustomBlock } from './models/custom-block';
+import { NgxToolboxBuilderService } from './services/ngx-toolbox-builder.service';
+import { Category } from './models/category';
 
 declare var Blockly: any;
 
@@ -24,7 +26,15 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges {
     @Output() public xmlCode: EventEmitter<string> = new EventEmitter<string>();
 
     public workspace: any;
-    private _xmlString = null;
+
+    private _xml = null;
+    private _searchbarTimeout;
+    private readonly _SEARCHBAR_CLASS = 'searchbar';
+    private readonly _TOOLBAR_CLASS = 'toolbar';
+
+    constructor(
+        private _ngxToolboxBuilder: NgxToolboxBuilderService
+    ) {}
 
     ngOnInit(): void {
         if (this.customBlocks) {
@@ -99,7 +109,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     ngAfterViewInit() {
-       this._init();
+       this._initWorkspace();
     }
 
     @HostListener('window:resize', ['$event'])
@@ -109,7 +119,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges {
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
         if (changes.config && !changes.config.firstChange) {
-            this._init();
+            this._initWorkspace();
         }
     }
 
@@ -129,47 +139,141 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges {
         if (this.generatorConfig.python) {
             this.pythonCode.emit(Blockly.Python.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
         }
-        if (!this.config.readOnly) {
-            this._xmlString = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.Workspace.getById(workspaceId)));
-        }
-        if (this.generatorConfig.xml && this._xmlString) {
-            this.xmlCode.emit(this._xmlString);
+        if (this.generatorConfig.xml && this._xml) {
+            this.xmlCode.emit(this._xml);
         }
     }
 
     public toXml(): string {
+        if (this._xml) {
+            return this._xml;
+        }
         return Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(this.workspace));
     }
 
     public fromXml(xml: string) {
-        this._xmlString = xml;
+        this._xml = xml;
         Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.textToDom(xml), this.workspace);
     }
 
     public appendFromXml(xml: string) {
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(xml), this.workspace);
+        const workspace = new Blockly.Workspace();
+        Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.textToDom(this.toXml()), workspace);
+        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(xml), workspace);
+        this.fromXml(Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(workspace)));
+        workspace.dispose();
+    }
+
+    public clear() {
+        if (this.workspace) {
+            this.workspace.clear();
+        }
+        if (this._searchbarInput) {
+            this._searchbarInput.value = '';
+        }
     }
 
     protected resize() {
         Blockly.svgResize(this.workspace);
     }
 
-    private _init() {
+    private _initWorkspace() {
+
         if (this.workspace) {
             this.workspace.dispose();
         }
+
         this.workspace = Blockly.inject('blockly', this.config);
-        this.workspace.addChangeListener(($event) => {
-            this._onWorkspaceChange($event);
+        this.workspace.addChangeListener((event) => {
+            this._onWorkspaceChange(event);
         });
-        if (this._xmlString) {
-            this.fromXml(this._xmlString);
+
+        if (this._xml) {
+            this.fromXml(this._xml);
         }
+
+        this._initSearchbar();
         this.resize();
     }
 
-    private _onWorkspaceChange($event: any) {
-        this.workspaceChange.emit($event);
-        this.workspaceToCode($event.workspaceId);
+    private _onWorkspaceChange(event: any) {
+        if (!this.config.readOnly) {
+            this._xml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.Workspace.getById(event.workspaceId)));
+        }
+        this.workspaceChange.emit(event);
+        this.workspaceToCode(event.workspaceId);
+    }
+
+    private _initSearchbar() {
+        if (this.config.search) {
+            if (this.workspace) {
+                const toolbox = this.workspace.getToolbox();
+                if (toolbox) {
+                    if (!this._searchbarInput && this.config.search.enabled) {
+                        const input = document.createElement('input');
+                        input.placeholder = this.config.search.placeholder ? this.config.search.placeholder : 'Search ...';
+                        input.className = this._SEARCHBAR_CLASS;
+                        input.size = 1;
+                        input.addEventListener ('keyup', this._searchBlocks.bind(this));
+                        toolbox.HtmlDiv.firstChild.classList.add(this._TOOLBAR_CLASS);
+                        toolbox.HtmlDiv.insertBefore(input, toolbox.HtmlDiv.firstChild);
+                    } else if (this._searchbarInput && !this.config.search.enabled) {
+                        toolbox.HtmlDiv.removeChild(this._searchbarInput);
+                        toolbox.HtmlDiv.firstChild.classList.remove(this._TOOLBAR_CLASS);
+                    }
+                }
+            }
+        }
+    }
+
+    private _searchBlocks(event) {
+        clearTimeout(this._searchbarTimeout);
+        if (this.workspace) {
+            const toolbox = this.workspace.getToolbox();
+            if (toolbox) {
+                this._searchbarTimeout = setTimeout(() => {
+                    const blocks = toolbox.searchBlocks(event.target.value);
+                    if (blocks.length > 0) {
+                        // build search result xml
+                        const category = this.config.search.category;
+                        this._ngxToolboxBuilder.nodes = [
+                            new Category(
+                                category && category.name ? category.name : 'Search',
+                                category && category.color ? category.color : '#ccc',
+                                blocks
+                            )
+                        ];
+                        const searchResultXmlString = this._ngxToolboxBuilder.build();
+                        const searchResultXml: any = Blockly.Options.parseToolboxTree(searchResultXmlString);
+                        // add first node of search result xml to toolbox
+                        const toolboxXml: any = Blockly.Options.parseToolboxTree(this.config.toolbox);
+                        toolboxXml.insertBefore(searchResultXml.firstChild, toolboxXml.firstChild);
+                        // parse toolbox xml back to string
+                        const toolboxXmlString = Blockly.Xml.domToText(toolboxXml);
+                        // update toolbox
+                        this.workspace.updateToolbox(toolboxXmlString);
+                        toolbox.selectFirstCategory();
+                    } else {
+                        this.workspace.updateToolbox(this.config.toolbox);
+                        const flyout = this.workspace.getFlyout();
+                        if (flyout) {
+                            flyout.hide();
+                        }
+                    }
+                }, 100);
+            }
+        }
+    }
+
+    private get _searchbarInput() {
+        let searchbar = null;
+        if (this.workspace) {
+            const toolbox = this.workspace.getToolbox();
+            if (toolbox) {
+                const elements = toolbox.HtmlDiv.getElementsByClassName(this._SEARCHBAR_CLASS);
+                searchbar = elements.length > 0 ? elements[0] : null;
+            }
+        }
+        return searchbar;
     }
 }

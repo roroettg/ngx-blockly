@@ -3,6 +3,8 @@ import { NgxBlocklyConfig } from '../../projects/ngx-blockly/src/lib/ngx-blockly
 import { NgxBlocklyGeneratorConfig } from '../../projects/ngx-blockly/src/lib/ngx-blockly/ngx-blockly-generator.config';
 import { ExampleMutator } from './blocks/example.mutator';
 import { ExampleBlock } from './blocks/example.block';
+import { NgxToolboxBuilderService, LOGIC_CATEGORY, LOOP_CATEGORY, MATH_CATEGORY, TEXT_CATEGORY, LISTS_CATEGORY, COLOUR_CATEGORY, VARIABLES_CATEGORY, FUNCTIONS_CATEGORY } from '../../projects/ngx-blockly/src/lib/ngx-blockly/services/ngx-toolbox-builder.service';
+import { Separator } from '../../projects/ngx-blockly/src/lib/ngx-blockly/models/separator';
 
 @Component({
     selector: 'app-root',
@@ -11,12 +13,29 @@ import { ExampleBlock } from './blocks/example.block';
 })
 export class AppComponent {
 
+    constructor(ngxToolboxBuilder: NgxToolboxBuilderService) {
+
+        ngxToolboxBuilder.nodes = [
+            LOGIC_CATEGORY,
+            LOOP_CATEGORY,
+            MATH_CATEGORY,
+            TEXT_CATEGORY,
+            LISTS_CATEGORY,
+            COLOUR_CATEGORY,
+            new Separator(),
+            VARIABLES_CATEGORY,
+            FUNCTIONS_CATEGORY
+        ];
+        this.config.toolbox = ngxToolboxBuilder.build();
+    }
+
     public customBlocks = [
         new ExampleBlock(null, new ExampleMutator('example_mutator'))
     ];
 
     public config: NgxBlocklyConfig = {
         toolbox: '<xml id="toolbox" style="display: none">' +
+            '<category name="Logic" colour="%{BKY_LOGIC_HUE}">' +
             '<block type="controls_if"></block>' +
             '<block type="controls_repeat_ext"></block>' +
             '<block type="logic_compare"></block>' +
@@ -26,9 +45,13 @@ export class AppComponent {
             '<block type="text"></block>' +
             '<block type="text_print"></block>' +
             '<block type="example_block"></block>' +
+            '</category>' +
             '</xml>',
         scrollbars: true,
-        trashcan: true
+        trashcan: true,
+        search: {
+            enabled: true
+        }
     };
 
 
