@@ -100,3 +100,26 @@ Blockly.Toolbox.prototype.searchBlocks =  function(value) {
 
     return result;
 };
+
+Blockly.Toolbox.prototype.setColourOrStyle_ = function(categoryInfo, childOut, categoryName) {
+
+    const styleName = categoryInfo['categorystyle'];
+    const cssClass = categoryInfo['categoryclass'];
+    const colour = categoryInfo['colour'];
+
+    if (colour && styleName) {
+        childOut.hexColour = '';
+        console.warn('Toolbox category "' + categoryName +
+            '" must not have both a style and a colour');
+    } else if (styleName) {
+        this.setColourFromStyle_(styleName, childOut, categoryName);
+    } else {
+        this.setColour_(colour, childOut, categoryName);
+    }
+
+    if (cssClass) {
+        const config = {...childOut.config_};
+        config.cssTreeRow = 'blocklyTreeRow ' + cssClass;
+        childOut.config_ = config;
+    }
+};

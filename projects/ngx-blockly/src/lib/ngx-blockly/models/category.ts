@@ -1,5 +1,6 @@
 import { Block } from './block';
 import { Node } from './node';
+import { callbackify } from 'util';
 
 export class Category implements Node {
 
@@ -9,19 +10,22 @@ export class Category implements Node {
     private _name: string;
     private _custom: string;
     private _style: string;
+    private _cssClass: string;
 
     constructor(name: string,
                 colour: string,
                 blocks?: Block[],
                 categories?: Category[],
                 custom?: string,
-                style?: string) {
+                style?: string,
+                cssClass?: string) {
         this._name = name;
         this._colour = colour;
         this._blocks = blocks ? blocks : [];
         this._categories = categories ? categories : [];
         this._custom = custom;
         this._style = style;
+        this._cssClass = cssClass;
     }
 
     get blocks(): Block[] {
@@ -72,15 +76,24 @@ export class Category implements Node {
         this._style = value;
     }
 
-    public toXML(): string {
-        let xml = `<category name="${this._name}" `;
+    get cssClass(): string {
+        return this._cssClass;
+    }
 
-        if (this.style === undefined) {
-            xml += `colour="${this._colour}" `;
+    set cssClass(value: string) {
+        this._cssClass = value;
+    }
+
+    public toXML(): string {
+        let xml = `<category name="${this._name}"`;
+
+        if (!this.style) {
+            xml += ` colour="${this._colour}"`;
         } else {
-            xml += `categorystyle="${this._style}" `;
+            xml += ` categorystyle="${this._style}"`;
         }
 
+        xml += this.cssClass ? ` categoryclass="${this._cssClass}"` : '';
         xml += this.custom ? ` custom="${this._custom}">` : '>';
 
         for (const category of this._categories) {
