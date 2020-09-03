@@ -31,18 +31,18 @@ Blockly.Toolbox.prototype.searchBlocks =  function(value) {
     }
 
     function recursiveSearch(child) {
-        if (child instanceof Blockly.tree.TreeControl) {
+        if (child.children_ && child.children_.length > 0) {
             for (let i = 0; i < child.children_.length; i++) {
                 recursiveSearch(child.children_[i]);
             }
-        } else if (child instanceof Blockly.tree.TreeNode) {
-            if ('blocks' in child) {
-                for (let i = 0; i < child.blocks.length; i++) {
-                    if (typeof(child.blocks[i]) === 'object') {
-                        if ('type' in child.blocks[i].attributes) {
-                            const type = child.blocks[i].attributes.type.value;
+        } else if (child.contents && Array.isArray(child.contents)) {
+            for (let i = 0; i < child.contents.length; i++) {
+                if (typeof(child.contents[i]) === 'object') {
+                    if (child.contents[i].type && child.contents[i].kind) {
+                        if (child.contents[i].kind === 'BLOCK') {
+                            const type = child.contents[i].type;
                             if (compare(value, type)) {
-                                blockTypes.add(child.blocks[i].attributes.type.value);
+                            blockTypes.add(type);
                             } else {
                                 const searchblock = searchWorkspace.newBlock(type);
                                 if (compare(value, searchblock.tooltip)) {
