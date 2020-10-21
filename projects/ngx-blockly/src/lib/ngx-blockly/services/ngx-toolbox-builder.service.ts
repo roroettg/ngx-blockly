@@ -18,7 +18,6 @@ export const LOOP_CATEGORY: Category = new Category('Loops', '%{BKY_LOOPS_HUE}',
     new XmlBlock('controls_whileUntil'),
     new XmlBlock('controls_for'),
     new XmlBlock('controls_forEach'),
-    new XmlBlock('controls_flow_statements'),
     new XmlBlock('controls_flow_statements')
 ]);
 
