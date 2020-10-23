@@ -67,7 +67,7 @@ export class AppComponent {
     };
 }
 ```
-Example app.component.ts
+Example app.component.html
 ```html
 <ngx-blockly [config]="config"></ngx-blockly>
 
