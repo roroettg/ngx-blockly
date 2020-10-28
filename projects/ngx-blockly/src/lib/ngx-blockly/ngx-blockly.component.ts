@@ -184,9 +184,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges {
         }
 
         this.workspace = Blockly.inject('blockly', this.config);
-        this.workspace.addChangeListener((event) => {
-            this._onWorkspaceChange(event);
-        });
+        this.workspace.addChangeListener(this._onWorkspaceChange.bind(this));
 
         if (this._xml) {
             this.fromXml(this._xml);
@@ -197,9 +195,19 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     private _onWorkspaceChange(event: any) {
+
         if (!this.config.readOnly) {
             this._xml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.Workspace.getById(event.workspaceId)));
         }
+
+        if (event.type === Blockly.Events.BLOCK_MOVE) {
+            return;
+        }
+
+        if (event.type === Blockly.Events.UI && event.element !== 'dragStop') {
+            return;
+        }
+
         this.workspaceChange.emit(event);
         this.workspaceToCode(event.workspaceId);
     }
