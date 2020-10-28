@@ -260,7 +260,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges {
                         const toolboxXmlString = Blockly.Xml.domToText(toolboxXml);
                         // update toolbox
                         this.workspace.updateToolbox(toolboxXmlString);
-                        toolbox.selectFirstCategory();
+                        toolbox.selectItemByPosition(0);
                     } else {
                         this.workspace.updateToolbox(this.config.toolbox);
                         const flyout = this.workspace.getFlyout();

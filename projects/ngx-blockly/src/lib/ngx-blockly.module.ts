@@ -27,30 +27,26 @@ Blockly.Toolbox.prototype.searchBlocks =  function(value) {
 
     value = value.trim();
     if (value.length > 0) {
-        recursiveSearch(this.tree_);
+        recursiveSearch(this.toolboxDef_);
     }
 
     function recursiveSearch(child) {
-        if (child.children_ && child.children_.length > 0) {
-            for (let i = 0; i < child.children_.length; i++) {
-                recursiveSearch(child.children_[i]);
-            }
-        } else if (child.contents && Array.isArray(child.contents)) {
+        if (child.contents && Array.isArray(child.contents)) {
             for (let i = 0; i < child.contents.length; i++) {
-                if (typeof(child.contents[i]) === 'object') {
-                    if (child.contents[i].type && child.contents[i].kind) {
-                        if (child.contents[i].kind === 'BLOCK') {
-                            const type = child.contents[i].type;
-                            if (compare(value, type)) {
-                            blockTypes.add(type);
-                            } else {
-                                const searchblock = searchWorkspace.newBlock(type);
-                                if (compare(value, searchblock.tooltip)) {
-                                    blockTypes.add(type);
-                                }
-                                searchWorkspace.clear();
+                if (typeof(child.contents[i]) === 'object' && child.contents[i].kind) {
+                    if (child.contents[i].kind === 'BLOCK' && child.contents[i].type) {
+                        const type = child.contents[i].type;
+                        if (compare(value, type)) {
+                        blockTypes.add(type);
+                        } else {
+                            const searchblock = searchWorkspace.newBlock(type);
+                            if (compare(value, searchblock.tooltip)) {
+                                blockTypes.add(type);
                             }
+                            searchWorkspace.clear();
                         }
+                    } else if (child.contents[i].kind === 'CATEGORY') {
+                        recursiveSearch(child.contents[i]);
                     }
                 }
             }
@@ -101,25 +97,43 @@ Blockly.Toolbox.prototype.searchBlocks =  function(value) {
     return result;
 };
 
-Blockly.Toolbox.prototype.setColourOrStyle_ = function(categoryInfo, childOut, categoryName) {
-
-    const styleName = categoryInfo['categorystyle'];
-    const cssClass = categoryInfo['categoryclass'];
-    const colour = categoryInfo['colour'];
-
-    if (colour && styleName) {
-        childOut.hexColour = '';
-        console.warn('Toolbox category "' + categoryName +
-            '" must not have both a style and a colour');
-    } else if (styleName) {
-        this.setColourFromStyle_(styleName, childOut, categoryName);
-    } else {
-        this.setColour_(colour, childOut, categoryName);
+Blockly.ToolboxCategory.prototype.parseContents_ = function(categoryDef) {
+    const contents = categoryDef['contents'];
+    if (categoryDef['custom']) {
+      this.flyoutItems_ = categoryDef['custom'];
+    } else if (contents) {
+        for (let i = 0, itemDef; (itemDef = contents[i]); i++) {
+            const flyoutItem = /** @type {Blockly.utils.toolbox.FlyoutItemInfo} */ (itemDef);
+            this.flyoutItems_.push(flyoutItem);
+        }
     }
+    if (categoryDef['categoryclass']) {
+        this.cssConfig_.row += ' ' + categoryDef['categoryclass'];
+    }
+};
 
-    if (cssClass) {
-        const config = {...childOut.config_};
-        config.cssTreeRow = 'blocklyTreeRow ' + cssClass;
-        childOut.config_ = config;
+Blockly.CollapsibleToolboxCategory.prototype.parseContents_ = function(categoryDef) {
+    const contents = categoryDef['contents'];
+    let prevIsFlyoutItem = true;
+    if (categoryDef['custom']) {
+        this.flyoutItems_ = categoryDef['custom'];
+    } else if (contents) {
+        for (let i = 0, itemDef; (itemDef = contents[i]); i++) {
+            // Separators can exist as either a flyout item or a toolbox item so
+            // decide where it goes based on the type of the previous item.
+            if (!Blockly.registry.hasItem(Blockly.registry.Type.TOOLBOX_ITEM, itemDef['kind']) ||
+                (itemDef['kind'].toLowerCase() === Blockly.ToolboxSeparator.registrationName &&
+                prevIsFlyoutItem)) {
+                const flyoutItem = /** @type {Blockly.utils.toolbox.FlyoutItemInfo} */ (itemDef);
+                this.flyoutItems_.push(flyoutItem);
+                prevIsFlyoutItem = true;
+            } else {
+            this.createToolboxItem_(itemDef);
+                prevIsFlyoutItem = false;
+            }
+        }
+    }
+    if (categoryDef['categoryclass']) {
+        this.cssConfig_.row += ' ' + categoryDef['categoryclass'];
     }
 };
