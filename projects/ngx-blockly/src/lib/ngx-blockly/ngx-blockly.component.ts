@@ -252,9 +252,9 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges {
                             )
                         ];
                         const searchResultXmlString = this._ngxToolboxBuilder.build();
-                        const searchResultXml: any = Blockly.Options.parseToolboxTree(searchResultXmlString);
+                        const searchResultXml: any = Blockly.utils.toolbox.parseToolboxTree(searchResultXmlString);
                         // add first node of search result xml to toolbox
-                        const toolboxXml: any = Blockly.Options.parseToolboxTree(this.config.toolbox);
+                        const toolboxXml: any = Blockly.utils.toolbox.parseToolboxTree(this.config.toolbox);
                         toolboxXml.insertBefore(searchResultXml.firstChild, toolboxXml.firstChild);
                         // parse toolbox xml back to string
                         const toolboxXmlString = Blockly.Xml.domToText(toolboxXml);
