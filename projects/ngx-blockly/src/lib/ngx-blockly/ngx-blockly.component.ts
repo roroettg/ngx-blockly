@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnInit, Output, OnChanges, SimpleChange } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output, OnChanges, SimpleChange, OnDestroy, AfterViewInit } from '@angular/core';
 import { NgxBlocklyConfig } from './ngx-blockly.config';
 import { NgxBlocklyGeneratorConfig } from './ngx-blockly-generator.config';
 import { CustomBlock } from './models/custom-block';
@@ -12,7 +12,7 @@ declare var Blockly: any;
     templateUrl: './ngx-blockly.component.html',
     styleUrls: ['./ngx-blockly.component.css']
 })
-export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges {
+export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
 
     @Input() public config: NgxBlocklyConfig = {};
     @Input() public generatorConfig: NgxBlocklyGeneratorConfig = {};
@@ -29,6 +29,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges {
 
     private _xml = null;
     private _searchbarTimeout;
+    private _resizeTimeout;
     private readonly _SEARCHBAR_CLASS = 'searchbar';
     private readonly _TOOLBAR_CLASS = 'toolbar';
 
@@ -37,6 +38,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges {
     ) {}
 
     ngOnInit(): void {
+
         if (this.customBlocks) {
             for (const customBlock of this.customBlocks) {
                 Blockly.Blocks[customBlock.type] = {
@@ -109,12 +111,19 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     ngAfterViewInit() {
-       this._initWorkspace();
+        this._initWorkspace();
+    }
+
+    ngOnDestroy() {
+        if (this.workspace) {
+            this.workspace.dispose();
+        }
     }
 
     @HostListener('window:resize', ['$event'])
     onResize(event) {
-        setTimeout(() => this.resize(), 200);
+        clearTimeout(this._resizeTimeout);
+        this._resizeTimeout = setTimeout(() => this.resize(), 200);
     }
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
@@ -174,7 +183,9 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     protected resize() {
-        Blockly.svgResize(this.workspace);
+        if (this.workspace) {
+            Blockly.svgResize(this.workspace);
+        }
     }
 
     private _initWorkspace() {
@@ -183,15 +194,16 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges {
             this.workspace.dispose();
         }
 
-        this.workspace = Blockly.inject('blockly', this.config);
-        this.workspace.addChangeListener(this._onWorkspaceChange.bind(this));
-
-        if (this._xml) {
-            this.fromXml(this._xml);
-        }
-
-        this._initSearchbar();
-        this.resize();
+        setTimeout(() => {
+            const element = document.getElementById('blockly');
+            this.workspace = Blockly.inject(element, this.config);
+            this.workspace.addChangeListener(this._onWorkspaceChange.bind(this));
+            if (this._xml) {
+                this.fromXml(this._xml);
+            }
+            this._initSearchbar();
+            this.resize();
+        });
     }
 
     private _onWorkspaceChange(event: any) {
