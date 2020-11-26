@@ -4,9 +4,11 @@ export class XmlBlock extends Block {
 
     private _values: Value[] = [];
     private _field: Field;
+    private _shadow: boolean;
 
-    constructor(type: string) {
+    constructor(type: string, shadow = false) {
         super(type);
+        this._shadow = shadow;
     }
 
     get values(): Value[] {
@@ -26,25 +28,23 @@ export class XmlBlock extends Block {
     }
 
     public toXML(): string {
-        let xml = `<block type="${this.type}">`;
-
+        const tagName = this._shadow ? 'shadow' : 'block';
+        let xml = '<' + tagName + ' type="' + this.type + '">';
         for (const value of this.values) {
             xml += value.toXML();
         }
         xml += this.field ? this.field.toXML() : '';
-        xml += '</block>';
+        xml += '</' + tagName + '>';
         return xml;
     }
 }
 
 export class Value {
     private _name: string;
-    private _shadow: XmlBlock;
     private _block: XmlBlock;
 
-    constructor(name: string, shadow: XmlBlock, block: XmlBlock) {
+    constructor(name: string, block: XmlBlock) {
         this._name = name;
-        this._shadow = shadow;
         this._block = block;
     }
 
@@ -56,14 +56,6 @@ export class Value {
         this._name = value;
     }
 
-    get shadow(): XmlBlock {
-        return this._shadow;
-    }
-
-    set shadow(value: XmlBlock) {
-        this._shadow = value;
-    }
-
     get block(): XmlBlock {
         return this._block;
     }
@@ -73,10 +65,7 @@ export class Value {
     }
 
     public toXML(): string {
-        return `<value name="${this.name}">` +
-        this.block ? this.block.toXML() : '' +
-        this.shadow ? this.shadow.toXML() : '' +
-            '</value>';
+        return `<value name="${this.name}">` + this.block.toXML() + '</value>';
     }
 }
 
