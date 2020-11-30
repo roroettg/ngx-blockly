@@ -166,11 +166,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
     }
 
     public appendFromXml(xml: string) {
-        const workspace = new Blockly.Workspace();
-        Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.textToDom(this.toXml()), workspace);
-        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(xml), workspace);
-        this.fromXml(Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(workspace)));
-        workspace.dispose();
+        Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(xml), this.workspace);
     }
 
     public clear() {
