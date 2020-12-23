@@ -362,3 +362,16 @@ config: NgxBlocklyConfig = {
     theme: exampleTheme.createBlocklyTheme(),
   };
 ```
+
+### Eventlistener
+At the moment it is possible to subscribe to workspace and toolbox change listeners.
+```html
+<ngx-blockly 
+    [config]="config" 
+    (workspaceChange)="workspaceChange($event)"
+    (toolboxChange)="toolboxChange($event)">
+</ngx-blockly>
+```
+
+
+

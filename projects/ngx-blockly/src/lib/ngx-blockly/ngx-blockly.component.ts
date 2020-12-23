@@ -18,6 +18,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
     @Input() public generatorConfig: NgxBlocklyGeneratorConfig = {};
     @Input() public customBlocks: CustomBlock[] = [];
     @Output() public workspaceChange: EventEmitter<any> = new EventEmitter<any>();
+    @Output() public toolboxChange: EventEmitter<any> = new EventEmitter<any>();
     @Output() public dartCode: EventEmitter<string> = new EventEmitter<string>();
     @Output() public javascriptCode: EventEmitter<string> = new EventEmitter<string>();
     @Output() public luaCode: EventEmitter<string> = new EventEmitter<string>();
@@ -193,7 +194,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
         setTimeout(() => {
             const element = document.getElementById('blockly');
             this.workspace = Blockly.inject(element, this.config);
-            this.workspace.addChangeListener(this._onWorkspaceChange.bind(this));
+            this.workspace.addChangeListener(this._onChange.bind(this));
             if (this._xml) {
                 this.fromXml(this._xml);
             }
@@ -202,8 +203,12 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
         });
     }
 
-    private _onWorkspaceChange(event: any) {
+    private _onChange(event: any) {
+        this._onWorkspaceChange(event);
+        this._onToolboxChange(event);
+    }
 
+    private _onWorkspaceChange(event: any) {
         if (!this.config.readOnly) {
             this._xml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.Workspace.getById(event.workspaceId)));
         }
@@ -218,6 +223,14 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
 
         this.workspaceChange.emit(event);
         this.workspaceToCode(event.workspaceId);
+    }
+
+    private _onToolboxChange(event: any) {
+        if (event.type === Blockly.Events.UI && event.element !== 'category') {
+            return;
+        }
+        this.toolboxChange.emit(event);
+
     }
 
     private _initSearchbar() {
@@ -292,4 +305,6 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
         }
         return searchbar;
     }
+
+
 }
