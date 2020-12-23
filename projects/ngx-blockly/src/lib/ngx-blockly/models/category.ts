@@ -1,6 +1,5 @@
 import { Block } from './block';
 import { Node } from './node';
-import { callbackify } from 'util';
 
 export class Category implements Node {
 
@@ -11,6 +10,7 @@ export class Category implements Node {
     private _custom: string;
     private _style: string;
     private _cssClass: string;
+    private _toolboxitemid: string;
 
     constructor(name: string,
                 colour: string,
@@ -18,7 +18,8 @@ export class Category implements Node {
                 categories?: Category[],
                 custom?: string,
                 style?: string,
-                cssClass?: string) {
+                cssClass?: string,
+                toolboxitemid?: string) {
         this._name = name;
         this._colour = colour;
         this._blocks = blocks ? blocks : [];
@@ -26,6 +27,7 @@ export class Category implements Node {
         this._custom = custom;
         this._style = style;
         this._cssClass = cssClass;
+        this._toolboxitemid = toolboxitemid;
     }
 
     get blocks(): Block[] {
@@ -84,8 +86,20 @@ export class Category implements Node {
         this._cssClass = value;
     }
 
+    get toolboxitemid(): string {
+        return this._toolboxitemid;
+    }
+
+    set toolboxitemid(value: string) {
+        this._toolboxitemid = value;
+    }
+
     public toXML(): string {
         let xml = `<category name="${this._name}"`;
+
+        if (this.toolboxitemid) {
+            xml += ` toolboxitemid="${this.toolboxitemid}"`;
+        }
 
         if (!this.style) {
             xml += ` colour="${this._colour}"`;
