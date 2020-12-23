@@ -217,16 +217,15 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
             return;
         }
 
-        if (event.type === Blockly.Events.UI && event.element !== 'dragStop') {
+        if (event.type === Blockly.Events.BLOCK_DRAG && !event.isStart) {
             return;
         }
-
         this.workspaceChange.emit(event);
         this.workspaceToCode(event.workspaceId);
     }
 
     private _onToolboxChange(event: any) {
-        if (event.type === Blockly.Events.UI && event.element !== 'category') {
+        if (event.type !== Blockly.Events.TOOLBOX_ITEM_SELECT) {
             return;
         }
         this.toolboxChange.emit(event);
