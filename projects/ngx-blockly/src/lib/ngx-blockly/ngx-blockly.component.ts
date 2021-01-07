@@ -133,6 +133,10 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
         }
     }
 
+    /**
+     * Generate code for all blocks in the workspace to the specified output.
+     * @param {Blockly.Workspace} workspace Workspace to generate code from.
+     */
     public workspaceToCode(workspaceId: string) {
         if (this.generatorConfig.dart) {
            this.dartCode.emit(Blockly.Dart.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
@@ -154,6 +158,10 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
         }
     }
 
+    /**
+     * Converts a DOM structure into properly indented text.
+     * @return {string} Text representation.
+     */
     public toXml(): string {
         if (this._xml) {
             return this._xml;
@@ -161,25 +169,76 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
         return Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(this.workspace));
     }
 
+    /**
+     * Clear the given workspace then decode an XML DOM and
+     * create blocks on the workspace.
+     * @param {!Element} xml XML DOM..
+     */
     public fromXml(xml: string) {
         this._xml = xml;
         Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.textToDom(xml), this.workspace);
     }
 
+    /**
+     * Decode an XML DOM and create blocks on the workspace. Position the new
+     * blocks immediately below prior blocks, aligned by their starting edge.
+     * @param {!Element} xml The XML DOM.
+     */
     public appendFromXml(xml: string) {
         Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(xml), this.workspace);
     }
 
+    /**
+     * Dispose of all blocks in workspace, with an optimization to prevent resizes.
+     */
     public clear() {
         if (this.workspace) {
             this.workspace.clear();
         }
-        if (this._searchbarInput) {
-            this._searchbarInput.value = '';
+    }
+
+    /**
+     * Clear the undo/redo stacks.
+     */
+    public clearUndo() {
+        if (this.workspace) {
+            this.workspace.clearUndo();
         }
     }
 
-    protected resize() {
+    /**
+     * Clear the reference to the current gesture.
+     */
+    public clearGesture() {
+        if (this.workspace) {
+            this.workspace.clearGesture();
+        }
+    }
+
+    /**
+     * Clear search input and result set.
+     */
+    public clearSearch() {
+        if (this._searchbarInput) {
+            this._searchbarInput.value = '';
+            this._removeSearchResult();
+        }
+    }
+
+    /**
+     * Clear the clipboard.
+     */
+    public clearClipboard() {
+        Blockly.clipboardXml_ = null;
+        Blockly.clipboardSource_ = null;
+        Blockly.clipboardTypeCounts_ = null;
+    }
+
+    /**
+     * Size the workspace when the contents change. This also updates
+     * scrollbars accordingly.
+     */
+    public resize() {
         if (this.workspace) {
             Blockly.svgResize(this.workspace);
         }
@@ -212,14 +271,6 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
         if (!this.config.readOnly) {
             this._xml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.Workspace.getById(event.workspaceId)));
         }
-
-        if (event.type === Blockly.Events.BLOCK_MOVE) {
-            return;
-        }
-
-        if (event.type === Blockly.Events.BLOCK_DRAG && !event.isStart) {
-            return;
-        }
         this.workspaceChange.emit(event);
         this.workspaceToCode(event.workspaceId);
     }
@@ -229,7 +280,6 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
             return;
         }
         this.toolboxChange.emit(event);
-
     }
 
     private _initSearchbar() {
@@ -282,13 +332,19 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
                         this.workspace.updateToolbox(toolboxXmlString);
                         toolbox.selectItemByPosition(0);
                     } else {
-                        this.workspace.updateToolbox(this.config.toolbox);
-                        const flyout = this.workspace.getFlyout();
-                        if (flyout) {
-                            flyout.hide();
-                        }
+                        this._removeSearchResult();
                     }
                 }, 100);
+            }
+        }
+    }
+
+    private _removeSearchResult() {
+        if (this.workspace) {
+            this.workspace.updateToolbox(this.config.toolbox);
+            const flyout = this.workspace.getFlyout();
+            if (flyout) {
+                flyout.hide();
             }
         }
     }
@@ -304,6 +360,4 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
         }
         return searchbar;
     }
-
-
 }
