@@ -272,10 +272,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
             this._xml = Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.Workspace.getById(event.workspaceId)));
         }
         this.workspaceChange.emit(event);
-        if (event.recordUndo) {
-            // prevents too many code generations
-            this.workspaceToCode(event.workspaceId);
-        }
+        this.workspaceToCode(event.workspaceId);
     }
 
     private _onToolboxChange(event: any) {
