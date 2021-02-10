@@ -1,3 +1,4 @@
+import { UUID } from 'angular2-uuid';
 import { Block } from './block';
 import { Node } from './node';
 
@@ -27,7 +28,7 @@ export class Category implements Node {
         this._custom = custom;
         this._style = style;
         this._cssClass = cssClass;
-        this._toolboxItemId = toolboxItemId;
+        this._toolboxItemId = toolboxItemId ? toolboxItemId : UUID.UUID();
     }
 
     get blocks(): Block[] {
@@ -95,7 +96,7 @@ export class Category implements Node {
     }
 
     public toXML(): string {
-        let xml = `<category name="${this._name}"`;
+        let xml = `<category expanded="false" name="${this._name}"`;
 
         if (this.toolboxItemId) {
             xml += ` toolboxitemid="${this.toolboxItemId}"`;

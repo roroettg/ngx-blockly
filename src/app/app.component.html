@@ -1,5 +1,6 @@
 <ngx-blockly 
-    [config]="config" 
+    [config]="config"
+    [readonly]="readonly"
     [generatorConfig]="generatorConfig" 
     [customBlocks]="customBlocks"
     (javascriptCode)="onCode($event)">

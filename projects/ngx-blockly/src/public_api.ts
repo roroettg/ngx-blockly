@@ -13,5 +13,6 @@ export * from './lib/ngx-blockly/models/separator';
 export * from './lib/ngx-blockly/models/theme';
 export * from './lib/ngx-blockly/models/node';
 export * from './lib/ngx-blockly/models/block-mutator';
+export * from './lib/ngx-blockly/plugins/ngx-blockly.toolbox';
 export * from './lib/ngx-blockly/services/ngx-toolbox-builder.service';
 export * from './lib/ngx-blockly.module';
