@@ -1,4 +1,6 @@
-export class NgxBlocklyConfig {
+declare var Blockly: any;
+
+export class NgxBlocklyConfig extends Blockly.BlocklyOptions {
     // Allows blocks to be collapsed or expanded. Defaults to true if the toolbox has categories, false otherwise.
     collapse?: boolean;
     // Allows blocks to have comments. Defaults to true if the toolbox has categories, false otherwise.

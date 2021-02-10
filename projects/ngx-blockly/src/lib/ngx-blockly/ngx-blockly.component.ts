@@ -108,9 +108,8 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
     }
 
     ngAfterViewInit() {
-        const config = {...this.config};
-        config.readOnly = false;
-        this.workspace = Blockly.inject(this.primaryContainer.nativeElement, config);
+        this.config.readOnly = false;
+        this.workspace = Blockly.inject(this.primaryContainer.nativeElement, this.config);
         this.workspace.addChangeListener(this._onWorkspaceChange.bind(this));
         this.resize();
     }
@@ -176,6 +175,9 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
      */
     public fromXml(xml: string) {
         Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.textToDom(xml), this.workspace);
+        if (this._secondaryWorkspace) {
+            Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.textToDom(xml), this._secondaryWorkspace);
+        }
     }
 
     /**
@@ -185,6 +187,9 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
      */
     public appendFromXml(xml: string) {
         Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(xml), this.workspace);
+        if (this._secondaryWorkspace) {
+            Blockly.Xml.appendDomToWorkspace(Blockly.Xml.textToDom(xml), this._secondaryWorkspace);
+        }
     }
 
     /**
