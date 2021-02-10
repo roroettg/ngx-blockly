@@ -44,19 +44,6 @@ export class AppComponent {
             '<block type="text_print"></block>' +
             '<block type="example_block"></block>' +
             '</category>' +
-            '<category name="test" toolboxitemid="abc">' +
-            '<category name="hello">' +
-            '<block type="controls_if"></block>' +
-            '<block type="controls_repeat_ext"></block>' +
-            '<block type="logic_compare"></block>' +
-            '<block type="math_number_property"></block>' +
-            '<block type="math_number"></block>' +
-            '<block type="math_arithmetic"></block>' +
-            '<block type="text"></block>' +
-            '<block type="text_print"></block>' +
-            '<block type="example_block"></block>' +
-            '</category>' +
-            '</category>' +
             '</xml>',
         scrollbars: true,
         trashcan: true,
@@ -85,7 +72,7 @@ export class AppComponent {
             VARIABLES_CATEGORY,
             FUNCTIONS_CATEGORY
         ];
-        //this.config.toolbox = ngxToolboxBuilder.build();
+        this.config.toolbox = ngxToolboxBuilder.build();
     }
 
     onCode(code: string) {
