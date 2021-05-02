@@ -302,7 +302,7 @@ export class TestBlock extends CustomBlock {
     defineBlock() {
         this.block.appendDummyInput()
             .appendField(this.type)
-            .appendField(new Blockly.FieldImage('assets/testblock.png', 50, 50, '*'));
+            .appendField(new Blockly.FieldImage('assets/testblock.png', 50, 50, '*'))
             .appendField(new Blockly.FieldImage(this.args[0], 50, 50, '*'));
         this.block.setOutput(true, 'Input');
         this.block.setColour(30);
