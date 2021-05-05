@@ -4,6 +4,7 @@ export class XmlBlock extends Block {
 
     private _values: Value[] = [];
     private _field: Field;
+    private _mutation: Mutation;
     private _shadow: boolean;
 
     constructor(type: string, shadow = false) {
@@ -27,6 +28,14 @@ export class XmlBlock extends Block {
         this._field = value;
     }
 
+    get mutation(): Mutation {
+        return this._mutation;
+    }
+
+    set mutation(mutation: Mutation) {
+        this._mutation = mutation;
+    }
+
     public toXML(): string {
         const tagName = this._shadow ? 'shadow' : 'block';
         let xml = '<' + tagName + ' type="' + this.type + '">';
@@ -34,6 +43,9 @@ export class XmlBlock extends Block {
             xml += value.toXML();
         }
         xml += this.field ? this.field.toXML() : '';
+        if (this._mutation) {
+            xml += this._mutation.toXML();
+        }
         xml += '</' + tagName + '>';
         return xml;
     }
@@ -96,5 +108,36 @@ export class Field {
 
     public toXML(): string {
         return `<field name="${this.name}">` + this.value + '</field>';
+    }
+}
+
+export class Mutation {
+
+    private _name: string;
+    private _value: string;
+
+    constructor(name: string, value: string) {
+        this._name = name;
+        this._value = value;
+    }
+
+    get name(): string {
+        return this._name;
+    }
+
+    set name(value: string) {
+        this._name = value;
+    }
+
+    get value(): string {
+        return this._value;
+    }
+
+    set value(value: string) {
+        this._value = value;
+    }
+
+    public toXML(): string {
+        return '<mutation ' + this.name + ' = "' + this.value + '"></mutation>';
     }
 }
