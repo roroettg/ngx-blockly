@@ -1,11 +1,12 @@
 import { UUID } from 'angular2-uuid';
 import { Block } from './block';
 import { Node } from './node';
+import { Button } from './button';
+import { Label } from './label';
 
 export class Category implements Node {
 
-    private _blocks: Block[];
-    private _categories: Category[];
+    private _elements: (Block | Category | Button | Label) [];
     private _colour: string;
     private _name: string;
     private _custom: string;
@@ -15,36 +16,26 @@ export class Category implements Node {
 
     constructor(name: string,
                 colour: string,
-                blocks?: Block[],
-                categories?: Category[],
+                elements?: (Block | Category | Button | Label) [],
                 custom?: string,
                 style?: string,
                 cssClass?: string,
                 toolboxItemId?: string) {
         this._name = name;
+        this._elements = elements ? elements : [];
         this._colour = colour;
-        this._blocks = blocks ? blocks : [];
-        this._categories = categories ? categories : [];
         this._custom = custom;
         this._style = style;
         this._cssClass = cssClass;
         this._toolboxItemId = toolboxItemId ? toolboxItemId : UUID.UUID();
     }
 
-    get blocks(): Block[] {
-        return this._blocks;
+    get elements(): (Block | Category | Button | Label)[] {
+        return this._elements;
     }
 
-    set blocks(value: Block[]) {
-        this._blocks = value;
-    }
-
-    get categories(): Category[] {
-        return this._categories;
-    }
-
-    set categories(value: Category[]) {
-        this._categories = value;
+    set elements(value: (Block | Category | Button | Label)[]) {
+        this._elements = value;
     }
 
     get colour(): string {
@@ -96,28 +87,25 @@ export class Category implements Node {
     }
 
     public toXML(): string {
-        let xml = `<category expanded="false" name="${this._name}"`;
+        let xml = `<category expanded="false" name="${this.name}"`;
 
         if (this.toolboxItemId) {
             xml += ` toolboxitemid="${this.toolboxItemId}"`;
         }
 
         if (!this.style) {
-            xml += ` colour="${this._colour}"`;
+            xml += ` colour="${this.colour}"`;
         } else {
-            xml += ` categorystyle="${this._style}"`;
+            xml += ` categorystyle="${this.style}"`;
         }
 
-        xml += this.cssClass ? ` categoryclass="${this._cssClass}"` : '';
-        xml += this.custom ? ` custom="${this._custom}">` : '>';
+        xml += this.cssClass ? ` categoryclass="${this.cssClass}"` : '';
+        xml += this.custom ? ` custom="${this.custom}">` : '>';
 
-        for (const category of this._categories) {
-            xml += category.toXML();
+        for (const element of this.elements) {
+            xml += element.toXML();
         }
 
-        for (const block of this._blocks) {
-            xml += block.toXML();
-        }
         xml += '</category>';
 
         return xml;
