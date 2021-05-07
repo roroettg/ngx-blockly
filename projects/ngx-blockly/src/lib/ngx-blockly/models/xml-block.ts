@@ -38,7 +38,7 @@ export class XmlBlock extends Block {
 
     public toXML(): string {
         const tagName = this._shadow ? 'shadow' : 'block';
-        let xml = '<' + tagName + ' type="' + this.type + '">';
+        let xml = `<${tagName} type="${this.type}" disabled="${this.disabled}">`;
         for (const value of this.values) {
             xml += value.toXML();
         }
@@ -46,7 +46,7 @@ export class XmlBlock extends Block {
         if (this._mutation) {
             xml += this._mutation.toXML();
         }
-        xml += '</' + tagName + '>';
+        xml += `</${tagName}>`;
         return xml;
     }
 }

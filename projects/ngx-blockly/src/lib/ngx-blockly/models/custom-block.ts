@@ -32,7 +32,7 @@ export abstract class CustomBlock extends Block {
     }
 
     public toXML(): string {
-        return `<block type="${this.type}"></block>`;
+        return `<block type="${this.type}" disabled="${this.disabled}"></block>`;
     }
 
     public toDartCode(block: CustomBlock): string | any[] {
