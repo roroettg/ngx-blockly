@@ -9,6 +9,8 @@ export * from './lib/ngx-blockly/models/block';
 export * from './lib/ngx-blockly/models/custom-block';
 export * from './lib/ngx-blockly/models/xml-block';
 export * from './lib/ngx-blockly/models/category';
+export * from './lib/ngx-blockly/models/button';
+export * from './lib/ngx-blockly/models/label';
 export * from './lib/ngx-blockly/models/separator';
 export * from './lib/ngx-blockly/models/theme';
 export * from './lib/ngx-blockly/models/node';
