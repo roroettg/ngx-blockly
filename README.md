@@ -259,28 +259,45 @@ Toolbox with search
 ```
 
 Toolbox Generator
+
 ```typescript
-    public customBlocks: CustomBlock[] = [
-        new TestBlock('test', null, null),
-        new DeviceBlock('device', null, null)
+import { Category } from './category';
+
+public customBlocks: CustomBlock[] = [
+    new TestBlock(),
+    new DeviceBlock()
+];
+
+// https://developers.google.com/blockly/guides/configure/web/toolbox#xml_12
+public buttons: Button[] = [
+    new Button('NewButton', 'CallbackKey')
+];
+
+public labels: Label[] = [
+    new Label('NewLabel', 'web-class')
+];
+
+public customCategory = new Category(
+    'MyCategory',
+    '#FF00FF',
+    [...this.buttons, ...this.customBlocks, ...this.labels]
+);
+
+constructor(ngxToolboxBuilder : NgxToolboxBuilderService) {
+    ngxToolboxBuilder.nodes = [
+        this.customCategory,
+        LOGIC_CATEGORY,
+        LOOP_CATEGORY,
+        MATH_CATEGORY,
+        TEXT_CATEGORY,
+        new Separator(), //Add Separator
+        LISTS_CATEGORY,
+        COLOUR_CATEGORY,
+        VARIABLES_CATEGORY,
+        FUNCTIONS_CATEGORY
     ];
-
-
-    constructor(ngxToolboxBuilder: NgxToolboxBuilderService) {
-        ngxToolboxBuilder.nodes = [
-                   new Category('Test', '#FF00FF',this.customBlocks, null),
-                   LOGIC_CATEGORY,
-                   LOOP_CATEGORY,
-                   MATH_CATEGORY,
-                   TEXT_CATEGORY,
-                   new Separator(), //Add Separator
-                   LISTS_CATEGORY,
-                   COLOUR_CATEGORY,
-                   VARIABLES_CATEGORY,
-                   FUNCTIONS_CATEGORY
-        ];
-        this.config.toolbox = ngxToolboxBuilder.build();
-    }
+    this.config.toolbox = ngxToolboxBuilder.build();
+}
 ```
 ```html
     # do not forget to add your customblocks
@@ -294,8 +311,9 @@ declare var Blockly: any;
 export class TestBlock extends CustomBlock {
 
 
-    constructor(type: string, block: any, blockMutator: BlockMutator, ...args: any[]) {
-        super(type, block, blockMutator, ...args);
+    constructor() {
+        // Add Mutator or further args if needed
+        super('TestBlock');
         this.class = TestBlock;
     }
 
