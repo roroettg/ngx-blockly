@@ -40,7 +40,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
             for (const customBlock of this.customBlocks) {
                 Blockly.Blocks[customBlock.type] = {
                     init: function () {
-                        const block = new customBlock.class(customBlock.type, this, customBlock.blockMutator, ...customBlock.args);
+                        const block = new customBlock.class(customBlock.type, customBlock.blockMutator, ...customBlock.args);
                         block.init(this);
                         this.mixin({
                                 blockInstance: block
