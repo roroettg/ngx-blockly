@@ -1,5 +1,3 @@
-declare var Blockly: any;
-
 export class CustomMutator extends Blockly.Mutator {
 
     constructor(block) {
@@ -9,7 +7,7 @@ export class CustomMutator extends Blockly.Mutator {
     drawIcon_(group: SVGElement) {
         group.setAttribute('width', '40');
         // Necessary to keep symbols under control
-        const g = Blockly.utils.dom.createSvgElement('g', {}, group);
+        const g = Blockly.utils.dom.createSvgElement<Element>('g', {}, group);
         Blockly.utils.dom.createSvgElement('path', {
             'transform': 'scale(0.5) translate(0,4)',
             'fill': '#ffffff',

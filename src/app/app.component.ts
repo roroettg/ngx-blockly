@@ -16,7 +16,6 @@ import {
 import { Separator } from '../../projects/ngx-blockly/src/lib/ngx-blockly/models/separator';
 import { NgxBlocklyToolbox } from '../../projects/ngx-blockly/src/lib/ngx-blockly/plugins/ngx-blockly.toolbox';
 
-declare var Blockly: any;
 
 @Component({
     selector: 'app-root',

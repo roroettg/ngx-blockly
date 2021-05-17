@@ -6,8 +6,6 @@ import { NgxBlocklyConfig } from './ngx-blockly.config';
 import { NgxBlocklyGeneratorConfig } from './ngx-blockly-generator.config';
 import { CustomBlock } from './models/custom-block';
 
-declare var Blockly: any;
-
 @Component({
     selector: 'ngx-blockly',
     templateUrl: './ngx-blockly.component.html',
@@ -43,8 +41,8 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
                         const block = new customBlock.class(customBlock.type, customBlock.blockMutator, ...customBlock.args);
                         block.init(this);
                         this.mixin({
-                                blockInstance: block
-                            }
+                            blockInstance: block
+                        }
                         );
                     }
                 };
@@ -83,13 +81,13 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
                         }
                     };
                     if (customBlock.blockMutator.blockList && customBlock.blockMutator.blockList.length > 0) {
-                        mutator_mixin.decompose = function(workspace: any) {
+                        mutator_mixin.decompose = function (workspace: any) {
                             return customBlock.blockMutator.decompose.call(customBlock.blockMutator, this, workspace);
                         };
-                        mutator_mixin.compose = function(topBlock: any) {
+                        mutator_mixin.compose = function (topBlock: any) {
                             customBlock.blockMutator.compose.call(customBlock.blockMutator, this, topBlock);
                         };
-                        mutator_mixin.saveConnections = function(containerBlock: any) {
+                        mutator_mixin.saveConnections = function (containerBlock: any) {
                             customBlock.blockMutator.saveConnections.call(customBlock.blockMutator, this, containerBlock);
                         };
                     }
@@ -97,7 +95,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
                     Blockly.Extensions.registerMutator(
                         customBlock.blockMutator.name,
                         mutator_mixin,
-                        function() {
+                        function () {
                             customBlock.blockMutator.afterBlockInit.call(customBlock.blockMutator, this);
                         },
                         customBlock.blockMutator.blockList
@@ -114,7 +112,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
         this.resize();
     }
 
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
+    ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
         if (changes.readonly) {
             this.setReadonly(changes.readonly.currentValue);
         }
@@ -141,7 +139,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
      */
     public workspaceToCode(workspaceId: string) {
         if (this.generatorConfig.dart) {
-           this.dartCode.emit(Blockly.Dart.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
+            this.dartCode.emit(Blockly.Dart.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
         }
         if (this.generatorConfig.javascript) {
             this.javascriptCode.emit(Blockly.JavaScript.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
@@ -254,7 +252,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
         if (readonly) {
             this.secondaryContainer.nativeElement.classList.remove('hidden');
             if (!this._secondaryWorkspace) {
-                const config = {...this.config};
+                const config = { ...this.config };
                 config.readOnly = true;
                 this._secondaryWorkspace = Blockly.inject(this.secondaryContainer.nativeElement, config);
             }

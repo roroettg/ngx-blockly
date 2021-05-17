@@ -20,7 +20,7 @@
     "@angular/core": "10.x.x"
   },
   "dependencies": {
-    "tslib": "^2.0.0",
+    "tslib": "^2.2.0",
     "angular2-uuid": "^1.1.1"
   },
   "scripts": {

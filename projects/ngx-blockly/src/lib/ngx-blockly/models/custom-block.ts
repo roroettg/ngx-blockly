@@ -1,11 +1,9 @@
 import { BlockMutator } from './block-mutator';
 import { Block } from './block';
 
-declare var Blockly: any;
-
 export abstract class CustomBlock extends Block {
 
-    private _block: any;
+    private _block: Blockly.Block;
     private _blockMutator: BlockMutator;
     private _args: any[];
 
@@ -16,7 +14,7 @@ export abstract class CustomBlock extends Block {
         this._args = args;
     }
 
-    public init(block: any) {
+    public init(block: Blockly.Block) {
         this._block = block;
         this.defineBlock();
         this.block.setOnChange(function (event) {
@@ -26,7 +24,7 @@ export abstract class CustomBlock extends Block {
 
     public abstract defineBlock();
 
-    public onChange(changeEvent: any) {
+    public onChange(_: Blockly.Events.Abstract) {
         // nothing to do
     }
 
@@ -34,31 +32,31 @@ export abstract class CustomBlock extends Block {
         return `<block type="${this.type}" disabled="${this.disabled}"></block>`;
     }
 
-    public toDartCode(block: CustomBlock): string | any[] {
+    public toDartCode(block: Blockly.Block): string | any[] {
         return 'Not implemented';
     }
 
-    public toJavaScriptCode(block: CustomBlock): string | any[] {
+    public toJavaScriptCode(block: Blockly.Block): string | any[] {
         return 'Not implemented';
     }
 
-    public toLuaCode(block: CustomBlock): string | any[] {
+    public toLuaCode(block: Blockly.Block): string | any[] {
         return 'Not implemented';
     }
 
-    public toPHPCode(block: CustomBlock): string | any[] {
+    public toPHPCode(block: Blockly.Block): string | any[] {
         return 'Not implemented';
     }
 
-    public toPythonCode(block: CustomBlock): string | any[] {
+    public toPythonCode(block: Blockly.Block): string | any[] {
         return 'Not implemented';
     }
 
-    get block() {
+    get block(): Blockly.Block {
         return this._block;
     }
 
-    set block(value) {
+    set block(value: Blockly.Block) {
         this._block = value;
     }
 
