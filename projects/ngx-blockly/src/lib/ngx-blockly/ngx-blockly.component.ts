@@ -17,7 +17,8 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
     @Input() public config: NgxBlocklyConfig = {};
     @Input() public generatorConfig: NgxBlocklyGeneratorConfig = {};
     @Input() public customBlocks: CustomBlock[] = [];
-    @Output() public workspaceChange: EventEmitter<any> = new EventEmitter<any>();
+    @Output() public workspaceCreate: EventEmitter<Blockly.WorkspaceSvg> = new EventEmitter<Blockly.WorkspaceSvg>();
+    @Output() public workspaceChange: EventEmitter<Blockly.Events.Abstract> = new EventEmitter<Blockly.Events.Abstract>();
     @Output() public toolboxChange: EventEmitter<any> = new EventEmitter<any>();
     @Output() public dartCode: EventEmitter<string> = new EventEmitter<string>();
     @Output() public javascriptCode: EventEmitter<string> = new EventEmitter<string>();
@@ -28,8 +29,8 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
 
     @ViewChild('primaryContainer') primaryContainer: ElementRef;
     @ViewChild('secondaryContainer') secondaryContainer: ElementRef;
-    public workspace: any;
-    private _secondaryWorkspace: any;
+    public workspace: Blockly.WorkspaceSvg;
+    private _secondaryWorkspace: Blockly.WorkspaceSvg;
     private _resizeTimeout;
 
     ngOnInit(): void {
@@ -109,6 +110,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
         this.config.readOnly = false;
         this.workspace = Blockly.inject(this.primaryContainer.nativeElement, this.config);
         this.workspace.addChangeListener(this._onWorkspaceChange.bind(this));
+        this.workspaceCreate.emit(this.workspace);
         this.resize();
     }
 
@@ -223,8 +225,8 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
     public clearSearch() {
         if (this.workspace) {
             const toolbox = this.workspace.getToolbox();
-            if (toolbox && typeof toolbox.clearSearch === 'function') {
-                this.workspace.getToolbox().clearSearch();
+            if (toolbox && typeof toolbox["clearSearch"] === 'function') {
+                this.workspace.getToolbox()["clearSearch"]();
             }
         }
     }
