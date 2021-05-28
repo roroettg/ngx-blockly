@@ -581,6 +581,13 @@ declare module Blockly {
         getField(name: string): Blockly.Field;
 
         /**
+         * Returns the named field from a block.
+         * @param {string} name The name of the field.
+         * @return {Blockly.Field} Named field, or null if field does not exist.
+         */
+        getField<T extends Blockly.Field>(name: string): T;
+
+        /**
          * Return all variables referenced by this block.
          * @return {!Array.<string>} List of variable names.
          */
@@ -10637,9 +10644,9 @@ declare module Blockly.WidgetDiv {
     function createDom(): void;
 
     /**
-       * The HTML container for popup overlays (e.g. editor widgets).
-       * @type {!Element}
-       */
+        * The HTML container for popup overlays (e.g. editor widgets).
+        * @type {!Element}
+        */
     var DIV: Element;
 
     /**
@@ -11692,7 +11699,7 @@ declare module Blockly {
          *     workspace.
          * @param {!SVGElement} bubbleCanvas The <g> element that contains the bubbles.
          * @param {Element} previousSibling The element to insert the block canvas and
-               bubble canvas after when it goes back in the DOM at the end of a drag.
+                 bubble canvas after when it goes back in the DOM at the end of a drag.
          * @param {number} width The width of the workspace SVG element.
          * @param {number} height The height of the workspace SVG element.
          * @param {number} scale The scale of the workspace being dragged.
@@ -12943,6 +12950,15 @@ declare module Blockly.Events {
          * @param {boolean} forward True if run forward, false if run backward (undo).
          */
         run(forward: boolean): void;
+
+        /** Gets or sets the name */
+        public readonly name: string;
+
+        /** Gets or sets the name */
+        public readonly newValue: any;
+
+        /** Gets or sets the name */
+        public readonly oldValue: any;
     }
 
 
@@ -13119,6 +13135,11 @@ declare module Blockly.Events {
          * @param {boolean} forward True if run forward, false if run backward (undo).
          */
         run(forward: boolean): void;
+
+        /** Gets the id of the new parent. */
+        public readonly newParentId: string;
+        /** Gets the id of the old parent. */
+        public readonly oldParentId: string;
     }
 
 
@@ -13483,6 +13504,9 @@ declare module Blockly.Events {
          * @protected
          */
         getEventWorkspace_(): Blockly.Workspace;
+
+        /** Gets or sets the block is */
+        public readonly blockId: string;
     }
 
 }
@@ -19764,7 +19788,7 @@ declare module Blockly.blockRendering {
          *     colourTertiary:(string|undefined),
          *     hat:(string|undefined)
          * }} blockStyle A full or partial block style object.
-        
+       
          * @return {!Blockly.Theme.BlockStyle} A full block style object, with all
          *     required properties populated.
          * @protected
@@ -22523,4 +22547,59 @@ declare module Blockly.Msg {
 
     /** @type {string} */
     var COLLAPSED_WARNINGS_WARNING: string;
+}
+
+declare module Blockly {
+    const Python: Generator;
+    const Dart: Generator;
+    const JavaScript: JavaScriptGenerator;
+    const Lua: Generator;
+    const PHP: Generator;
+
+    let clipboardXml_: any;
+    let clipboardSource_: any;
+    let clipboardTypeCounts_: any;
+
+    class JavaScriptGenerator extends Generator {
+        public readonly ORDER_ATOMIC = 0;           // 0 "" ...
+        public readonly ORDER_NEW = 1.1;            // new
+        public readonly ORDER_MEMBER = 1.2;         // . []
+        public readonly ORDER_FUNCTION_CALL = 2;    // ()
+        public readonly ORDER_INCREMENT = 3;        // ++
+        public readonly ORDER_DECREMENT = 3;        // --
+        public readonly ORDER_BITWISE_NOT = 4.1;    // ~
+        public readonly ORDER_UNARY_PLUS = 4.2;     // +
+        public readonly ORDER_UNARY_NEGATION = 4.3; // -
+        public readonly ORDER_LOGICAL_NOT = 4.4;    // !
+        public readonly ORDER_TYPEOF = 4.5;         // typeof
+        public readonly ORDER_VOID = 4.6;           // void
+        public readonly ORDER_DELETE = 4.7;         // delete
+        public readonly ORDER_AWAIT = 4.8;          // await
+        public readonly ORDER_EXPONENTIATION = 5.0; // **
+        public readonly ORDER_MULTIPLICATION = 5.1; // *
+        public readonly ORDER_DIVISION = 5.2;       // /
+        public readonly ORDER_MODULUS = 5.3;        // %
+        public readonly ORDER_SUBTRACTION = 6.1;    // -
+        public readonly ORDER_ADDITION = 6.2;       // +
+        public readonly ORDER_BITWISE_SHIFT = 7;    // << >> >>>
+        public readonly ORDER_RELATIONAL = 8;       // < <= > >=
+        public readonly ORDER_IN = 8;               // in
+        public readonly ORDER_INSTANCEOF = 8;       // instanceof
+        public readonly ORDER_EQUALITY = 9;         // == != === !==
+        public readonly ORDER_BITWISE_AND = 10;     // &
+        public readonly ORDER_BITWISE_XOR = 11;     // ^
+        public readonly ORDER_BITWISE_OR = 12;      // |
+        public readonly ORDER_LOGICAL_AND = 13;     // &&
+        public readonly ORDER_LOGICAL_OR = 14;      // ||
+        public readonly ORDER_CONDITIONAL = 15;     // ?:
+        public readonly ORDER_ASSIGNMENT = 16;      // = += -= **= *= /= %= <<= >>= ...
+        public readonly ORDER_YIELD = 16.5;         // yield
+        public readonly ORDER_COMMA = 17;           // ,
+        public readonly ORDER_NONE = 99;            // (...)
+    }
+
+    module Msg {
+        var SEARCH_CATEGORY: string;
+        var SEARCH_PLACEHOLDER: string;
+    }
 }

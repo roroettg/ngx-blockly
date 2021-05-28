@@ -3,7 +3,6 @@
  */
 
 /// <reference path="./blockly.ts" />
-/// <reference path="./blockly.extended.ts" />
 
 export * from './lib/ngx-blockly/ngx-blockly.component';
 export * from './lib/ngx-blockly/ngx-blockly.config';
