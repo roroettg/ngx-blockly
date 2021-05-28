@@ -6,8 +6,6 @@ import { NgxBlocklyConfig } from './ngx-blockly.config';
 import { NgxBlocklyGeneratorConfig } from './ngx-blockly-generator.config';
 import { CustomBlock } from './models/custom-block';
 
-declare var Blockly: any;
-
 @Component({
     selector: 'ngx-blockly',
     templateUrl: './ngx-blockly.component.html',
@@ -19,7 +17,8 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
     @Input() public config: NgxBlocklyConfig = {};
     @Input() public generatorConfig: NgxBlocklyGeneratorConfig = {};
     @Input() public customBlocks: CustomBlock[] = [];
-    @Output() public workspaceChange: EventEmitter<any> = new EventEmitter<any>();
+    @Output() public workspaceCreate: EventEmitter<Blockly.WorkspaceSvg> = new EventEmitter<Blockly.WorkspaceSvg>();
+    @Output() public workspaceChange: EventEmitter<Blockly.Events.Abstract> = new EventEmitter<Blockly.Events.Abstract>();
     @Output() public toolboxChange: EventEmitter<any> = new EventEmitter<any>();
     @Output() public dartCode: EventEmitter<string> = new EventEmitter<string>();
     @Output() public javascriptCode: EventEmitter<string> = new EventEmitter<string>();
@@ -30,8 +29,8 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
 
     @ViewChild('primaryContainer') primaryContainer: ElementRef;
     @ViewChild('secondaryContainer') secondaryContainer: ElementRef;
-    public workspace: any;
-    private _secondaryWorkspace: any;
+    public workspace: Blockly.WorkspaceSvg;
+    private _secondaryWorkspace: Blockly.WorkspaceSvg;
     private _resizeTimeout;
 
     ngOnInit(): void {
@@ -43,8 +42,8 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
                         const block = new customBlock.class(customBlock.type, customBlock.blockMutator, ...customBlock.args);
                         block.init(this);
                         this.mixin({
-                                blockInstance: block
-                            }
+                            blockInstance: block
+                        }
                         );
                     }
                 };
@@ -83,13 +82,13 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
                         }
                     };
                     if (customBlock.blockMutator.blockList && customBlock.blockMutator.blockList.length > 0) {
-                        mutator_mixin.decompose = function(workspace: any) {
+                        mutator_mixin.decompose = function (workspace: any) {
                             return customBlock.blockMutator.decompose.call(customBlock.blockMutator, this, workspace);
                         };
-                        mutator_mixin.compose = function(topBlock: any) {
+                        mutator_mixin.compose = function (topBlock: any) {
                             customBlock.blockMutator.compose.call(customBlock.blockMutator, this, topBlock);
                         };
-                        mutator_mixin.saveConnections = function(containerBlock: any) {
+                        mutator_mixin.saveConnections = function (containerBlock: any) {
                             customBlock.blockMutator.saveConnections.call(customBlock.blockMutator, this, containerBlock);
                         };
                     }
@@ -97,7 +96,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
                     Blockly.Extensions.registerMutator(
                         customBlock.blockMutator.name,
                         mutator_mixin,
-                        function() {
+                        function () {
                             customBlock.blockMutator.afterBlockInit.call(customBlock.blockMutator, this);
                         },
                         customBlock.blockMutator.blockList
@@ -111,10 +110,11 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
         this.config.readOnly = false;
         this.workspace = Blockly.inject(this.primaryContainer.nativeElement, this.config);
         this.workspace.addChangeListener(this._onWorkspaceChange.bind(this));
+        this.workspaceCreate.emit(this.workspace);
         this.resize();
     }
 
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
+    ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
         if (changes.readonly) {
             this.setReadonly(changes.readonly.currentValue);
         }
@@ -141,7 +141,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
      */
     public workspaceToCode(workspaceId: string) {
         if (this.generatorConfig.dart) {
-           this.dartCode.emit(Blockly.Dart.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
+            this.dartCode.emit(Blockly.Dart.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
         }
         if (this.generatorConfig.javascript) {
             this.javascriptCode.emit(Blockly.JavaScript.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
@@ -225,8 +225,8 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
     public clearSearch() {
         if (this.workspace) {
             const toolbox = this.workspace.getToolbox();
-            if (toolbox && typeof toolbox.clearSearch === 'function') {
-                this.workspace.getToolbox().clearSearch();
+            if (toolbox && typeof toolbox["clearSearch"] === 'function') {
+                this.workspace.getToolbox()["clearSearch"]();
             }
         }
     }
@@ -254,7 +254,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
         if (readonly) {
             this.secondaryContainer.nativeElement.classList.remove('hidden');
             if (!this._secondaryWorkspace) {
-                const config = {...this.config};
+                const config = { ...this.config };
                 config.readOnly = true;
                 this._secondaryWorkspace = Blockly.inject(this.secondaryContainer.nativeElement, config);
             }

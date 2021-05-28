@@ -1,7 +1,5 @@
 import { BlockMutator, CustomBlock } from 'ngx-blockly';
 
-declare var Blockly: any;
-
 export class ExampleBlock extends CustomBlock {
 
     constructor(block: any, blockMutator: BlockMutator) {

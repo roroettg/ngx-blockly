@@ -37,6 +37,8 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+/.devcontainer
+/.vscode
 
 # System Files
 .DS_Store

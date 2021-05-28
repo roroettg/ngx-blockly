@@ -1,7 +1,5 @@
 import { UUID } from 'angular2-uuid';
 
-declare var Blockly: any;
-
 export class NgxBlocklyToolbox extends Blockly.Toolbox {
 
     private readonly _SEARCHBAR_CLASS = 'searchbar';
@@ -50,7 +48,7 @@ export class NgxBlocklyToolbox extends Blockly.Toolbox {
         this._input.className = this._SEARCHBAR_CLASS;
         this._input.size = 1;
         this._input.addEventListener ('keyup', this._search.bind(this));
-        this.HtmlDiv.firstChild.classList.add(this._TOOLBAR_CLASS);
+        (this.HtmlDiv.firstChild as Element).classList.add(this._TOOLBAR_CLASS);
         this.HtmlDiv.insertBefore(this._input, this.HtmlDiv.firstChild);
     }
 
@@ -64,7 +62,7 @@ export class NgxBlocklyToolbox extends Blockly.Toolbox {
 
                 const result = this._recursiveSearch(searchKey, this.toolboxDef_);
                 if (result.length > 0) {
-                    const category = this.getToolboxItemById(this._categoryId);
+                    const category = this.getToolboxItemById(this._categoryId) as Blockly.ToolboxCategory;
                     category.updateFlyoutContents(result);
                     category.show();
                     this.setSelectedItem(category);
@@ -92,7 +90,7 @@ export class NgxBlocklyToolbox extends Blockly.Toolbox {
                         } else {
                             const workspace = new Blockly.Workspace();
                             const searchblock = workspace.newBlock(type);
-                            if (this._compare(searchKey, searchblock.tooltip)) {
+                            if (this._compare(searchKey, searchblock.tooltip as string)) {
                                 blockDefs.push(child.contents[i]);
                             }
                             workspace.dispose();
@@ -112,14 +110,14 @@ export class NgxBlocklyToolbox extends Blockly.Toolbox {
         if (flyout) {
             flyout.hide();
         }
-        const category = this.getToolboxItemById(this._categoryId);
+        const category = this.getToolboxItemById(this._categoryId) as Blockly.ToolboxCategory;
         if (category) {
             category.hide();
         }
     }
 
     private _storeExpandedState() {
-        this.getToolboxItems().forEach(item => {
+        this.getToolboxItems().forEach((item: Blockly.CollapsibleToolboxCategory) => {
             if (item.getId() !== this._categoryId && typeof item.isExpanded === 'function') {
                 this._categoryExpandedCache.set(item.getId(), item.isExpanded() ? true : false);
             }
@@ -128,7 +126,7 @@ export class NgxBlocklyToolbox extends Blockly.Toolbox {
 
     private _restoreExpandedState() {
         this._categoryExpandedCache.forEach((expanded: boolean, id: string) => {
-            const item = this.getToolboxItemById(id);
+            const item = this.getToolboxItemById(id) as Blockly.CollapsibleToolboxCategory;
             if (item && typeof item.setExpanded === 'function') {
                 item.setExpanded(expanded);
             }

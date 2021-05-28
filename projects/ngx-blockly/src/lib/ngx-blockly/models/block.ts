@@ -1,7 +1,12 @@
-export abstract class Block {
+import { BlockMutator } from "./block-mutator";
+import { CustomBlock } from "./custom-block";
+
+export type Constructor = new (type: string, blockMutator?: BlockMutator, ...args: any[]) => CustomBlock;
+
+export abstract class Block implements Block {
 
     private _type: string;
-    private _class: any;
+    private _class: Constructor;
     private _disabled = false;
 
     constructor(type: string) {
@@ -24,11 +29,11 @@ export abstract class Block {
         this._disabled = value;
     }
 
-    get class(): any {
+    get class(): Constructor {
         return this._class;
     }
 
-    set class(value: any) {
+    set class(value: Constructor) {
         this._class = value;
     }
 

@@ -2,6 +2,8 @@
  * Public API Surface of ngx-blockly
  */
 
+/// <reference path="./blockly.ts" />
+
 export * from './lib/ngx-blockly/ngx-blockly.component';
 export * from './lib/ngx-blockly/ngx-blockly.config';
 export * from './lib/ngx-blockly/ngx-blockly-generator.config';

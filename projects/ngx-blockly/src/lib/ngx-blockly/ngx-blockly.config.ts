@@ -1,4 +1,4 @@
-declare var Blockly: any;
-
-export class NgxBlocklyConfig extends Blockly.BlocklyOptions {
+export class NgxBlocklyConfig implements Blockly.BlocklyOptions {
+    readOnly?: boolean;
+    scrollbars?: boolean;
 }
