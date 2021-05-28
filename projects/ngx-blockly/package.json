@@ -20,8 +20,8 @@
     "@angular/core": "10.x.x"
   },
   "dependencies": {
-    "tslib": "^2.2.0",
-    "angular2-uuid": "^1.1.1"
+    "angular2-uuid": "^1.1.1",
+    "tslib": "^2.2.0"
   },
   "scripts": {
     "build_lib": "ng build NgxBlockly",
