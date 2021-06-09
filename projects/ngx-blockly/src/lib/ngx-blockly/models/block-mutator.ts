@@ -1,4 +1,3 @@
-
 export abstract class BlockMutator {
 
     private _name: string;

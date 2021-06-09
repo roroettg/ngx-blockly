@@ -1,37 +1,42 @@
-import { Component } from '@angular/core';
-import { NgxBlocklyGeneratorConfig } from '../../projects/ngx-blockly/src/lib/ngx-blockly/ngx-blockly-generator.config';
-import { ExampleMutator } from './blocks/example.mutator';
-import { ExampleBlock } from './blocks/example.block';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import {
-    NgxToolboxBuilderService,
+    Button,
+    Category,
+    COLOUR_CATEGORY,
+    CustomBlock,
+    FUNCTIONS_CATEGORY,
+    Label,
+    LISTS_CATEGORY,
     LOGIC_CATEGORY,
     LOOP_CATEGORY,
     MATH_CATEGORY,
+    NgxBlocklyComponent,
+    NgxBlocklyConfig,
+    NgxBlocklyGenerator,
+    NgxToolboxBuilderService,
+    Separator,
     TEXT_CATEGORY,
-    LISTS_CATEGORY,
-    COLOUR_CATEGORY,
-    VARIABLES_CATEGORY,
-    FUNCTIONS_CATEGORY
-} from '../../projects/ngx-blockly/src/lib/ngx-blockly/services/ngx-toolbox-builder.service';
-import { Separator } from '../../projects/ngx-blockly/src/lib/ngx-blockly/models/separator';
-import { NgxBlocklyToolbox } from '../../projects/ngx-blockly/src/lib/ngx-blockly/plugins/ngx-blockly.toolbox';
+    VARIABLES_CATEGORY
+} from 'ngx-blockly';
+import { ExampleBlock } from './blocks/example.block';
 
-declare var Blockly: any;
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
 
     public readonly = false;
 
-    public customBlocks = [
-        new ExampleBlock(null, new ExampleMutator('example_mutator'))
+    public customBlocks: CustomBlock[] = [
+        new ExampleBlock()
     ];
+    public button: Button = new Button('asd', 'asdasd');
+    public label: Label = new Label('asd', 'asdasd');
 
-    public config: any = {
+    public config: NgxBlocklyConfig = {
         toolbox: '<xml id="toolbox" style="display: none">' +
             '<category name="Logic" colour="%{BKY_LOGIC_HUE}">' +
             '<block type="controls_if"></block>' +
@@ -45,24 +50,32 @@ export class AppComponent {
             '<block type="example_block"></block>' +
             '</category>' +
             '</xml>',
-        scrollbars: true,
         trashcan: true,
-        plugins: {
-            'toolbox': NgxBlocklyToolbox
+        generators: [
+            NgxBlocklyGenerator.DART,
+            NgxBlocklyGenerator.LUA,
+            NgxBlocklyGenerator.JAVASCRIPT,
+            NgxBlocklyGenerator.PHP,
+            NgxBlocklyGenerator.PYTHON,
+            NgxBlocklyGenerator.XML
+        ],
+        defaultBlocks: true,
+        move: {
+            scrollbars: true
         }
+
+        // plugins: {
+        //     'toolbox': NgxBlocklyToolbox
+        // },
+
     };
 
-    public generatorConfig: NgxBlocklyGeneratorConfig = {
-        dart: true,
-        javascript: true,
-        lua: true,
-        php: true,
-        python: true,
-    };
+    @ViewChild('blockly') blocklyComponent: NgxBlocklyComponent;
 
     constructor(ngxToolboxBuilder: NgxToolboxBuilderService) {
         ngxToolboxBuilder.nodes = [
             LOGIC_CATEGORY,
+            new Category('bla', '#ff0000', [...this.customBlocks, this.button, this.label]),
             LOOP_CATEGORY,
             MATH_CATEGORY,
             TEXT_CATEGORY,
@@ -73,6 +86,11 @@ export class AppComponent {
             FUNCTIONS_CATEGORY
         ];
         this.config.toolbox = ngxToolboxBuilder.build();
+    }
+
+    ngAfterViewInit(): void {
+        // Blockly.Variables.createVariable(this.blocklyComponent.workspace, null, 'asdasd');
+        // this.blocklyComponent.workspace.createVariable('asdads', null, null);
     }
 
     onCode(code: string) {

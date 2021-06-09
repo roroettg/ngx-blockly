@@ -1,7 +1,5 @@
-import { BlockMutator } from 'ngx-blockly';
+import { Blockly, BlockMutator } from 'ngx-blockly';
 import { CustomMutator } from './custom-mutator';
-
-declare var Blockly: any;
 
 export class ExampleMutator extends BlockMutator {
 

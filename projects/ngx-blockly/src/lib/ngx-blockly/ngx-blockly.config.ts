@@ -1,4 +1,18 @@
-declare var Blockly: any;
+import * as Blockly from 'blockly/core';
+import { BlockStyle } from './models/theme';
 
-export class NgxBlocklyConfig extends Blockly.BlocklyOptions {
+export enum NgxBlocklyGenerator {
+    DART = 'Dart',
+    JAVASCRIPT = 'JavaScript',
+    LUA = 'Lua',
+    PHP = 'PHP',
+    PYTHON = 'Python',
+    XML = 'Xml'
+}
+
+export interface NgxBlocklyConfig extends Blockly.BlocklyOptions {
+    readonly?: boolean;
+    defaultBlocks?: boolean;
+    generators?: NgxBlocklyGenerator[];
+    plugins?: { [name: string]: any };
 }

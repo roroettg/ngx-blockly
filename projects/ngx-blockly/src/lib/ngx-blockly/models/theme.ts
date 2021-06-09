@@ -1,54 +1,29 @@
-declare var Blockly: any;
+import * as Blockly from 'blockly/core';
 
 export class Theme {
     constructor(private name: string,
                 private blockStyles: BlockStyles,
                 private categoryStyles: CategoryStyles,
-                private componentStyle: ComponentStyle) {
+                private componentStyle: Blockly.Theme.ComponentStyle) {
     }
 
     createBlocklyTheme(): any {
         return new Blockly.Theme(this.name, this.blockStyles, this.categoryStyles, this.componentStyle);
     }
-
-
 }
 
 export interface BlockStyles {
-    [blockStyleName: string]: BlockStyle;
+    [blockStyleName: string]: Blockly.Theme.BlockStyle;
 }
 
 export interface CategoryStyles {
-    [categoryStyleName: string]: CategoryStyle;
+    [categoryStyleName: string]: Blockly.Theme.CategoryStyle;
 }
 
 
 export class BlockStyle {
     colourPrimary: string;
-    colourSecondary?: string;
-    colourTertiary?: string;
-    hat?: string;
-}
-
-export class CategoryStyle {
-    colour: string;
-}
-
-export class ComponentStyle {
-    workspaceBackgroundColour?: string;
-    toolboxBackgroundColour?: string;
-    toolboxForegroundColour?: string;
-    flyoutBackgroundColour?: string;
-    flyoutForegroundColour?: string;
-    flyoutOpacity?: number;
-    scrollbarColour?: string;
-    scrollbarOpacity?: number;
-    insertionMarkerColour?: string;
-    insertionMarkerOpacity?: number;
-    markerColour?: string;
-    cursorColour?: string;
-    selectedGlowColour?: string;
-    selectedGlowOpacity?: number;
-    replacementGlowColour?: string;
-    replacementGlowOpacity?: number;
+    colourSecondary: string;
+    colourTertiary: string;
+    hat: string;
 }

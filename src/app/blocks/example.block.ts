@@ -1,12 +1,12 @@
-import { BlockMutator, CustomBlock } from 'ngx-blockly';
-
-declare var Blockly: any;
+import { Blockly, CustomBlock } from 'ngx-blockly';
+import { ExampleMutator } from './example.mutator';
 
 export class ExampleBlock extends CustomBlock {
 
-    constructor(block: any, blockMutator: BlockMutator) {
-        super('example_block', block, blockMutator);
+    constructor() {
+        super('example_block', new ExampleMutator('example_mutator'));
         this.class = ExampleBlock;
+        this.disabled = true;
     }
 
     public defineBlock() {
@@ -16,7 +16,7 @@ export class ExampleBlock extends CustomBlock {
         });
     }
 
-    public toPythonCode(block: ExampleBlock): string | any[] {
+    public toPythonCode(block: Blockly.Block): string | any[] {
         return '';
     }
 }

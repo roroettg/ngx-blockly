@@ -2,6 +2,8 @@
 
 An angular wrapper for google's blockly
 
+<h2 style="color:red">For >10.2.0-RC documentation might not be up to date, please view example in source</h2>
+
 ## Setup
 
 ### Installation

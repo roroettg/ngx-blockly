@@ -73,11 +73,13 @@ export const COLOUR_CATEGORY: Category = new Category('Colours', '%{BKY_COLOUR_H
     new XmlBlock('colour_blend')
 ]);
 
-export const VARIABLES_CATEGORY: Category = new Category('Variables', '%{BKY_VARIABLES_HUE}', [],  'VARIABLE');
+export const VARIABLES_CATEGORY: Category = new Category('Variables', '%{BKY_VARIABLES_HUE}', [], 'VARIABLE');
 
 export const FUNCTIONS_CATEGORY: Category = new Category('Functions', '%{BKY_PROCEDURES_HUE}', [], 'PROCEDURE');
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class NgxToolboxBuilderService {
 
     private _nodes: Node[];

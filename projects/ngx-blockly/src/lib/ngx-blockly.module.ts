@@ -1,8 +1,7 @@
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { NgxBlocklyComponent } from './ngx-blockly/ngx-blockly.component';
 import { NgxToolboxBuilderService } from './ngx-blockly/services/ngx-toolbox-builder.service';
-
-declare var Blockly: any;
+import * as Blockly from 'blockly/core';
 
 @NgModule({
     declarations: [NgxBlocklyComponent],
@@ -14,13 +13,13 @@ declare var Blockly: any;
 export class NgxBlocklyModule {
 }
 
-Blockly.ToolboxCategory.prototype.parseContents_ = function(categoryDef) {
+Blockly.ToolboxCategory.prototype.parseContents_ = function (categoryDef) {
     const contents = categoryDef['contents'];
     if (categoryDef['custom']) {
-      this.flyoutItems_ = categoryDef['custom'];
+        this.flyoutItems_ = categoryDef['custom'];
     } else if (contents) {
         for (let i = 0, itemDef; (itemDef = contents[i]); i++) {
-            const flyoutItem = /** @type {Blockly.utils.toolbox.FlyoutItemInfo} */ (itemDef);
+            const flyoutItem = (itemDef);
             this.flyoutItems_.push(flyoutItem);
         }
     }
@@ -29,7 +28,7 @@ Blockly.ToolboxCategory.prototype.parseContents_ = function(categoryDef) {
     }
 };
 
-Blockly.CollapsibleToolboxCategory.prototype.parseContents_ = function(categoryDef) {
+Blockly.CollapsibleToolboxCategory.prototype.parseContents_ = function (categoryDef) {
     const contents = categoryDef['contents'];
     let prevIsFlyoutItem = true;
     if (categoryDef['custom']) {
@@ -40,12 +39,12 @@ Blockly.CollapsibleToolboxCategory.prototype.parseContents_ = function(categoryD
             // decide where it goes based on the type of the previous item.
             if (!Blockly.registry.hasItem(Blockly.registry.Type.TOOLBOX_ITEM, itemDef['kind']) ||
                 (itemDef['kind'].toLowerCase() === Blockly.ToolboxSeparator.registrationName &&
-                prevIsFlyoutItem)) {
-                const flyoutItem = /** @type {Blockly.utils.toolbox.FlyoutItemInfo} */ (itemDef);
+                    prevIsFlyoutItem)) {
+                const flyoutItem = (itemDef);
                 this.flyoutItems_.push(flyoutItem);
                 prevIsFlyoutItem = true;
             } else {
-            this.createToolboxItem_(itemDef);
+                this.createToolboxItem_(itemDef);
                 prevIsFlyoutItem = false;
             }
         }
@@ -54,3 +53,4 @@ Blockly.CollapsibleToolboxCategory.prototype.parseContents_ = function(categoryD
         this.cssConfig_.row += ' ' + categoryDef['categoryclass'];
     }
 };
+

@@ -20,14 +20,15 @@
     "@angular/core": "10.x.x"
   },
   "dependencies": {
-    "tslib": "^2.0.0",
-    "angular2-uuid": "^1.1.1"
+    "tslib": "^2.2.0",
+    "angular2-uuid": "^1.1.1",
+    "blockly": "^5.20210325.1"
   },
   "scripts": {
     "build_lib": "ng build NgxBlockly",
     "copy_script": "cp -r src/scripts ../../dist/ngx-blockly",
-    "link": "npm run build_lib && npm run copy_script && cd ../../dist/ngx-blockly && npm link",
+    "link": "npm run build_lib && cd ../../dist/ngx-blockly && npm link",
     "publish_lib": "cd ../../dist/ngx-blockly && npm publish",
-    "publish": "npm run build_lib  && npm run copy_script && npm run publish_lib"
+    "publish": "npm run build_lib && npm run publish_lib"
   }
 }

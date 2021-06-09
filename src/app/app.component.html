@@ -1,7 +1,12 @@
-<ngx-blockly 
+<ngx-blockly
+    #blockly
     [config]="config"
     [readonly]="readonly"
-    [generatorConfig]="generatorConfig" 
     [customBlocks]="customBlocks"
-    (javascriptCode)="onCode($event)">
+    (javascriptCode)="onCode($event)"
+    (pythonCode)="onCode($event)"
+    (luaCode)="onCode($event)"
+    (xmlCode)="onCode($event)"
+    (dartCode)="onCode($event)"
+    (phpCode)="onCode($event)">
 </ngx-blockly>
