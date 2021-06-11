@@ -1,41 +1,41 @@
 import { UUID } from 'angular2-uuid';
-import { Block } from './block';
 import { Node } from './node';
-import { Button } from './button';
-import { Label } from './label';
 
 export class Category implements Node {
 
-    private _elements: (Block | Category | Button | Label) [];
+    private _nodes: Node [];
     private _colour: string;
     private _name: string;
     private _custom: string;
     private _style: string;
     private _cssClass: string;
     private _toolboxItemId: string;
+    private _hidden: boolean;
 
     constructor(name: string,
                 colour: string,
-                elements?: (Block | Category | Button | Label) [],
+                nodes?: Node [],
                 custom?: string,
                 style?: string,
                 cssClass?: string,
-                toolboxItemId?: string) {
+                toolboxItemId?: string,
+                hidden?: boolean) {
         this._name = name;
-        this._elements = elements ? elements : [];
+        this._nodes = nodes ? nodes : [];
         this._colour = colour;
         this._custom = custom;
         this._style = style;
         this._cssClass = cssClass;
         this._toolboxItemId = toolboxItemId ? toolboxItemId : UUID.UUID();
+        this._hidden = hidden;
     }
 
-    get elements(): (Block | Category | Button | Label)[] {
-        return this._elements;
+    get nodes(): Node[] {
+        return this._nodes;
     }
 
-    set elements(value: (Block | Category | Button | Label)[]) {
-        this._elements = value;
+    set nodes(nodes: Node[]) {
+        this._nodes = nodes;
     }
 
     get colour(): string {
@@ -86,6 +86,14 @@ export class Category implements Node {
         this._toolboxItemId = value;
     }
 
+    get hidden(): boolean {
+        return this._hidden;
+    }
+
+    set hidden(value: boolean) {
+        this._hidden = value;
+    }
+
     public toXML(): string {
         let xml = `<category expanded="false" name="${this.name}"`;
 
@@ -99,10 +107,14 @@ export class Category implements Node {
             xml += ` categorystyle="${this.style}"`;
         }
 
+        if (this.hidden) {
+            xml += ' hidden="true"';
+        }
+
         xml += this.cssClass ? ` categoryclass="${this.cssClass}"` : '';
         xml += this.custom ? ` custom="${this.custom}">` : '>';
 
-        for (const element of this.elements) {
+        for (const element of this.nodes) {
             xml += element.toXML();
         }
 

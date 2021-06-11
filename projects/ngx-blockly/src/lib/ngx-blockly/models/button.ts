@@ -1,4 +1,6 @@
-export class Button {
+import { Node } from './node';
+
+export class Button implements Node {
 
     private _text: string;
     private _callbackKey: string;

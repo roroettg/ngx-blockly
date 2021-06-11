@@ -1,9 +1,11 @@
 import { BlockMutator } from './block-mutator';
 import { CustomBlock } from './custom-block';
+import { Node } from './node';
+
 
 export type Constructor = new (type: string, blockMutator?: BlockMutator, ...args: any[]) => CustomBlock;
 
-export abstract class Block {
+export abstract class Block implements Node {
 
     private _type: string;
     private _class: Constructor;

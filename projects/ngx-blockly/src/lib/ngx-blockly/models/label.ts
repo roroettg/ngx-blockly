@@ -1,4 +1,6 @@
-export class Label {
+import { Node } from './node';
+
+export class Label implements Node {
 
     private _text: string;
     private _webClass: string;

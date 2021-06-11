@@ -1,6 +1,7 @@
 import { UUID } from 'angular2-uuid';
 import * as Blockly from 'blockly/core';
 import { ICollapsibleToolboxItem, ToolboxCategory } from 'blockly/blockly';
+import { Node } from '../models/node';
 
 export class NgxBlocklyToolbox extends Blockly.Toolbox {
 
@@ -13,18 +14,19 @@ export class NgxBlocklyToolbox extends Blockly.Toolbox {
     protected _input: HTMLInputElement;
     protected _categoryId = UUID.UUID();
     protected _categoryExpandedCache: Map<String, boolean> = new Map<String, boolean>();
+    private _nodes: Node[];
 
-    constructor(workspace) {
+    constructor(workspace: Blockly.WorkspaceSvg) {
         super(workspace);
         workspace.addChangeListener(this._onWorkspaceChange.bind(this));
     }
 
-    init() {
+    public init() {
         super.init();
         this._initSearchbar();
     }
 
-    render(parsedToolboxDef) {
+    public render(parsedToolboxDef) {
         if (parsedToolboxDef.contents.length === 0 || parsedToolboxDef.contents[0].toolboxitemid !== this._categoryId) {
             const name = Blockly.Msg[this.SEARCH_CATEGORY] ? Blockly.Msg[this.SEARCH_CATEGORY] : 'Search';
             const xmlDef =
@@ -43,6 +45,25 @@ export class NgxBlocklyToolbox extends Blockly.Toolbox {
         if (this._input) {
             this._input.value = '';
         }
+    }
+
+    public toXML(): string {
+        let xml = '<xml id="toolbox" style="display: none">';
+        if (this._nodes) {
+            for (const node of this._nodes) {
+                xml += node.toXML();
+            }
+        }
+        xml += '</xml>';
+        return xml;
+    }
+
+    get nodes(): Node[] {
+        return this._nodes;
+    }
+
+    set nodes(nodes: Node[]) {
+        this._nodes = nodes;
     }
 
     private _initSearchbar() {
