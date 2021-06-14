@@ -7,6 +7,7 @@ export type Constructor = new (type: string, blockMutator?: BlockMutator, ...arg
 
 export abstract class Block implements Node {
 
+    public kind = 'BLOCK';
     private _type: string;
     private _class: Constructor;
     private _disabled = false;

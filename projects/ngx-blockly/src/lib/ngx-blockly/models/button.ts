@@ -2,6 +2,7 @@ import { Node } from './node';
 
 export class Button implements Node {
 
+    public kind = 'BUTTON';
     private _text: string;
     private _callbackKey: string;
 

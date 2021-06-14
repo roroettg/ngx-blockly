@@ -2,6 +2,7 @@ import { Node } from './node';
 
 export class Label implements Node {
 
+    public kind = 'LABEL';
     private _text: string;
     private _webClass: string;
 
