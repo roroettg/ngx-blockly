@@ -12,11 +12,11 @@ import {
     MATH_CATEGORY,
     NgxBlocklyComponent,
     NgxBlocklyConfig,
-    NgxBlocklyGenerator,
-    NgxToolboxBuilderService,
+    NgxBlocklyGenerator, NgxBlocklyToolbox,
     Separator,
     TEXT_CATEGORY,
-    VARIABLES_CATEGORY
+    VARIABLES_CATEGORY,
+    Blockly
 } from 'ngx-blockly';
 import { ExampleBlock } from './blocks/example.block';
 
@@ -61,7 +61,8 @@ export class AppComponent implements AfterViewInit {
         ],
         defaultBlocks: true,
         move: {
-            scrollbars: true
+            scrollbars: true,
+            wheel: true
         }
 
         // plugins: {
@@ -72,8 +73,30 @@ export class AppComponent implements AfterViewInit {
 
     @ViewChild('blockly') blocklyComponent: NgxBlocklyComponent;
 
-    constructor(ngxToolboxBuilder: NgxToolboxBuilderService) {
-        ngxToolboxBuilder.nodes = [
+    constructor() {
+        const workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
+        const toolbox: NgxBlocklyToolbox = new NgxBlocklyToolbox(workspace);
+        toolbox.nodes = [
+            LOGIC_CATEGORY,
+            new Category('bla', '#ff0000', [...this.customBlocks, this.button, this.label]),
+            LOOP_CATEGORY,
+            MATH_CATEGORY,
+            TEXT_CATEGORY,
+            LISTS_CATEGORY,
+            COLOUR_CATEGORY,
+            new Separator(),
+            VARIABLES_CATEGORY,
+            FUNCTIONS_CATEGORY,
+            LOGIC_CATEGORY,
+            new Category('bla', '#ff0000', [...this.customBlocks, this.button, this.label]),
+            LOOP_CATEGORY,
+            MATH_CATEGORY,
+            TEXT_CATEGORY,
+            LISTS_CATEGORY,
+            COLOUR_CATEGORY,
+            new Separator(),
+            VARIABLES_CATEGORY,
+            FUNCTIONS_CATEGORY,
             LOGIC_CATEGORY,
             new Category('bla', '#ff0000', [...this.customBlocks, this.button, this.label]),
             LOOP_CATEGORY,
@@ -85,7 +108,7 @@ export class AppComponent implements AfterViewInit {
             VARIABLES_CATEGORY,
             FUNCTIONS_CATEGORY
         ];
-        this.config.toolbox = ngxToolboxBuilder.build();
+        this.config.toolbox = toolbox.toXML();
     }
 
     ngAfterViewInit(): void {
