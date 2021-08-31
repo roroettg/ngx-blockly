@@ -47,6 +47,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
     public workspace: Blockly.WorkspaceSvg;
     private _secondaryWorkspace: Blockly.WorkspaceSvg;
     private _resizeTimeout;
+    private _finishedLoading = false;
 
     ngOnInit() {
         this._initCustomBlocks(this.customBlocks);
@@ -124,6 +125,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
      * @param xml XML DOM..
      */
     public fromXml(xml: string) {
+        this._finishedLoading = false;
         Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.textToDom(xml), this.workspace);
         if (this._secondaryWorkspace) {
             Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.textToDom(xml), this._secondaryWorkspace);
@@ -217,11 +219,18 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
     }
 
     private _onWorkspaceChange(event: any) {
-        if (event.type === Blockly.Events.FINISHED_LOADING || event.recordUndo) {
-            this.workspaceToCode(event.workspaceId);
+        if (event.type === Blockly.Events.FINISHED_LOADING) {
+            this._finishedLoading = true;
         }
-        if (event.type === Blockly.Events.TOOLBOX_ITEM_SELECT) {
-            this.toolboxChange.emit(event);
+        if (this._finishedLoading) {
+            if (event instanceof Blockly.Events.BlockBase ||
+                event instanceof Blockly.Events.VarBase ||
+                event instanceof Blockly.Events.CommentBase) {
+                this.workspaceToCode(event.workspaceId);
+            }
+            if (event.type === Blockly.Events.TOOLBOX_ITEM_SELECT) {
+                this.toolboxChange.emit(event);
+            }
         }
         this.workspaceChange.emit(event);
     }
