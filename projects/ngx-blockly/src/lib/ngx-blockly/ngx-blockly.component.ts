@@ -217,11 +217,13 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
     }
 
     private _onWorkspaceChange(event: any) {
-        this.workspaceToCode(event.workspaceId);
-        this.workspaceChange.emit(event);
+        if (event.type === Blockly.Events.FINISHED_LOADING || event.recordUndo) {
+            this.workspaceToCode(event.workspaceId);
+        }
         if (event.type === Blockly.Events.TOOLBOX_ITEM_SELECT) {
             this.toolboxChange.emit(event);
         }
+        this.workspaceChange.emit(event);
     }
 
     private _initCustomBlocks(blocks: CustomBlock[]) {
