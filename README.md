@@ -134,6 +134,7 @@ export class NgxBlocklyConfig {
     plugins?: any;
 }
 
+``
 ```
 ### Code Generation
 ```typescript
