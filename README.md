@@ -2,8 +2,6 @@
 
 An angular wrapper for google's blockly
 
-<h2 style="color:red">For >10.2.0-RC documentation might not be up to date, please view example in source</h2>
-
 ## Setup
 
 ### Installation
@@ -13,16 +11,6 @@ Install from npm repository:
 npm install ngx-blockly --save
 ```
 
-Add the blockly scripts in `angular.json`
-
-```json
-"scripts": [
-    "node_modules/ngx-blockly/scripts/blockly/blockly_compressed.js",
-    "node_modules/ngx-blockly/scripts/blockly/blocks_compressed.js",
-    "node_modules/ngx-blockly/scripts/blockly/python_compressed.js",
-    "node_modules/ngx-blockly/scripts/blockly/msg/js/en.js",
-]
-```
 
 ### Sample
 Example app.module.ts
@@ -145,17 +133,6 @@ export class NgxBlocklyConfig {
     // Map of plugin type to name of registered plugin or plugin class.
     plugins?: any;
 }
-```
-Blockly Generator Config
-```typescript
-export class NgxBlocklyGeneratorConfig {
-    dart?: boolean;
-    javascript?: boolean;
-    lua?: boolean;
-    php?: boolean;
-    python?: boolean;
-    xml?: boolean
-}
 
 ```
 ### Code Generation
@@ -181,18 +158,18 @@ export class AppComponent {
             '<block type="text_print"></block>' +
             '</xml>',
         scrollbars: true,
-        trashcan: true
+        trashcan: true,
+        generators: [
+            NgxBlocklyGenerator.DART,
+            NgxBlocklyGenerator.LUA,
+            NgxBlocklyGenerator.JAVASCRIPT,
+            NgxBlocklyGenerator.PHP,
+            NgxBlocklyGenerator.PYTHON,
+            NgxBlocklyGenerator.XML
+        ],
+        defaultBlocks: true,
     };
-
-
-    public generatorConfig: NgxBlocklyGeneratorConfig = {
-        dart: true,
-        javascript: true,
-        lua: true,
-        php: true,
-        python: true,
-        xml: true
-    };
+    
 
     onCode(code: string) {
         console.log(code);
@@ -201,7 +178,7 @@ export class AppComponent {
 
 ```
 ```html
-<ngx-blockly [config]="config" [generatorConfig]="generatorConfig" (javascriptCode)="onCode($event)" (pythonCode)="onCode($event)"></ngx-blockly>
+<ngx-blockly [config]="config" (javascriptCode)="onCode($event)" (pythonCode)="onCode($event)"></ngx-blockly>
 
 ```
 ### Import/Export Blockly Project
@@ -303,7 +280,7 @@ constructor(ngxToolboxBuilder : NgxToolboxBuilderService) {
 ```
 ```html
     # do not forget to add your customblocks
-   <ngx-blockly [config]="config" [customBlocks]="customBlocks" [generatorConfig]="generatorConfig"  (javascriptCode)="onCode($event)"></ngx-blockly>
+   <ngx-blockly [config]="config" [customBlocks]="customBlocks" (javascriptCode)="onCode($event)"></ngx-blockly>
 ```
 
 ### Custom Block
