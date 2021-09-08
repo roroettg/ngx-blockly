@@ -94,7 +94,7 @@
       "blockly/msg/zh-hant": "ZH-HANT"
     }
   },
-  "whitelistedNonPeerDependencies": [
+  "allowedNonPeerDependencies": [
     "angular2-uuid",
     "blockly"
   ]
