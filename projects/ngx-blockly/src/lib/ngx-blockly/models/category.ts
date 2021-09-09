@@ -176,7 +176,6 @@ export const TEXT_CATEGORY: Category = new Category('Text', '%{BKY_TEXTS_HUE}', 
 
 export const LISTS_CATEGORY: Category = new Category('Lists', '%{BKY_LISTS_HUE}', [
     new XmlBlock('lists_create_with'),
-    new XmlBlock('lists_create_with'),
     new XmlBlock('lists_repeat'),
     new XmlBlock('lists_length'),
     new XmlBlock('lists_isEmpty'),
