@@ -49,8 +49,80 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
     private _resizeTimeout;
     private _finishedLoading = false;
 
+    public static initCustomBlocks(blocks: CustomBlock[]) {
+        if (blocks) {
+            for (const customBlock of blocks) {
+                Blockly.Blocks[customBlock.type] = {
+                    init: function () {
+                        const block = new customBlock.class(customBlock.type, customBlock.blockMutator, ...customBlock.args);
+                        block.init(this);
+                        this.mixin({
+                                blockInstance: block
+                            }
+                        );
+                    }
+                };
+                if (typeof Blockly[NgxBlocklyGenerator.PYTHON] !== 'undefined') {
+                    Blockly[NgxBlocklyGenerator.PYTHON][customBlock.type] = function (b) {
+                        return b.blockInstance.toPythonCode(b);
+                    };
+                }
+                if (typeof Blockly[NgxBlocklyGenerator.DART] !== 'undefined') {
+                    Blockly[NgxBlocklyGenerator.DART][customBlock.type] = function (b) {
+                        return b.blockInstance.toDartCode(b);
+                    };
+                }
+                if (typeof Blockly[NgxBlocklyGenerator.JAVASCRIPT] !== 'undefined') {
+                    Blockly[NgxBlocklyGenerator.JAVASCRIPT][customBlock.type] = function (b) {
+                        return b.blockInstance.toJavaScriptCode(b);
+                    };
+                }
+                if (typeof Blockly[NgxBlocklyGenerator.LUA] !== 'undefined') {
+                    Blockly[NgxBlocklyGenerator.LUA][customBlock.type] = function (b) {
+                        return b.blockInstance.toLuaCode(b);
+                    };
+                }
+                if (typeof Blockly[NgxBlocklyGenerator.PHP] !== 'undefined') {
+                    Blockly[NgxBlocklyGenerator.PHP][customBlock.type] = function (b) {
+                        return b.blockInstance.toPHPCode(b);
+                    };
+                }
+                if (customBlock.blockMutator) {
+                    const mutator_mixin: any = {
+                        mutationToDom: function () {
+                            return customBlock.blockMutator.mutationToDom.call(customBlock.blockMutator, this);
+                        },
+                        domToMutation: function (xmlElement: any) {
+                            customBlock.blockMutator.domToMutation.call(customBlock.blockMutator, this, xmlElement);
+                        }
+                    };
+                    if (customBlock.blockMutator.blockList && customBlock.blockMutator.blockList.length > 0) {
+                        mutator_mixin.decompose = function (workspace: any) {
+                            return customBlock.blockMutator.decompose.call(customBlock.blockMutator, this, workspace);
+                        };
+                        mutator_mixin.compose = function (topBlock: any) {
+                            customBlock.blockMutator.compose.call(customBlock.blockMutator, this, topBlock);
+                        };
+                        mutator_mixin.saveConnections = function (containerBlock: any) {
+                            customBlock.blockMutator.saveConnections.call(customBlock.blockMutator, this, containerBlock);
+                        };
+                    }
+                    Blockly.Extensions.unregister(customBlock.blockMutator.name);
+                    Blockly.Extensions.registerMutator(
+                        customBlock.blockMutator.name,
+                        mutator_mixin,
+                        function () {
+                            customBlock.blockMutator.afterBlockInit.call(customBlock.blockMutator, this);
+                        },
+                        customBlock.blockMutator.blockList
+                    );
+                }
+            }
+        }
+    }
+
     ngOnInit() {
-        this._initCustomBlocks(this.customBlocks);
+        NgxBlocklyComponent.initCustomBlocks(this.customBlocks);
     }
 
     ngAfterViewInit() {
@@ -231,78 +303,6 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
             }
             if (event.type === Blockly.Events.TOOLBOX_ITEM_SELECT) {
                 this.toolboxChange.emit(event);
-            }
-        }
-    }
-
-    private _initCustomBlocks(blocks: CustomBlock[]) {
-        if (blocks) {
-            for (const customBlock of blocks) {
-                Blockly.Blocks[customBlock.type] = {
-                    init: function () {
-                        const block = new customBlock.class(customBlock.type, customBlock.blockMutator, ...customBlock.args);
-                        block.init(this);
-                        this.mixin({
-                                blockInstance: block
-                            }
-                        );
-                    }
-                };
-                if (typeof Blockly[NgxBlocklyGenerator.PYTHON] !== 'undefined') {
-                    Blockly[NgxBlocklyGenerator.PYTHON][customBlock.type] = function (b) {
-                        return b.blockInstance.toPythonCode(b);
-                    };
-                }
-                if (typeof Blockly[NgxBlocklyGenerator.DART] !== 'undefined') {
-                    Blockly[NgxBlocklyGenerator.DART][customBlock.type] = function (b) {
-                        return b.blockInstance.toDartCode(b);
-                    };
-                }
-                if (typeof Blockly[NgxBlocklyGenerator.JAVASCRIPT] !== 'undefined') {
-                    Blockly[NgxBlocklyGenerator.JAVASCRIPT][customBlock.type] = function (b) {
-                        return b.blockInstance.toJavaScriptCode(b);
-                    };
-                }
-                if (typeof Blockly[NgxBlocklyGenerator.LUA] !== 'undefined') {
-                    Blockly[NgxBlocklyGenerator.LUA][customBlock.type] = function (b) {
-                        return b.blockInstance.toLuaCode(b);
-                    };
-                }
-                if (typeof Blockly[NgxBlocklyGenerator.PHP] !== 'undefined') {
-                    Blockly[NgxBlocklyGenerator.PHP][customBlock.type] = function (b) {
-                        return b.blockInstance.toPHPCode(b);
-                    };
-                }
-                if (customBlock.blockMutator) {
-                    const mutator_mixin: any = {
-                        mutationToDom: function () {
-                            return customBlock.blockMutator.mutationToDom.call(customBlock.blockMutator, this);
-                        },
-                        domToMutation: function (xmlElement: any) {
-                            customBlock.blockMutator.domToMutation.call(customBlock.blockMutator, this, xmlElement);
-                        }
-                    };
-                    if (customBlock.blockMutator.blockList && customBlock.blockMutator.blockList.length > 0) {
-                        mutator_mixin.decompose = function (workspace: any) {
-                            return customBlock.blockMutator.decompose.call(customBlock.blockMutator, this, workspace);
-                        };
-                        mutator_mixin.compose = function (topBlock: any) {
-                            customBlock.blockMutator.compose.call(customBlock.blockMutator, this, topBlock);
-                        };
-                        mutator_mixin.saveConnections = function (containerBlock: any) {
-                            customBlock.blockMutator.saveConnections.call(customBlock.blockMutator, this, containerBlock);
-                        };
-                    }
-                    Blockly.Extensions.unregister(customBlock.blockMutator.name);
-                    Blockly.Extensions.registerMutator(
-                        customBlock.blockMutator.name,
-                        mutator_mixin,
-                        function () {
-                            customBlock.blockMutator.afterBlockInit.call(customBlock.blockMutator, this);
-                        },
-                        customBlock.blockMutator.blockList
-                    );
-                }
             }
         }
     }
