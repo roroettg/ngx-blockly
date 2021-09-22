@@ -25,7 +25,7 @@
     "blockly": "^6.20210701.0"
   },
   "scripts": {
-    "build_lib": "ng build NgxBlockly",
+    "build_lib": "ng build NgxBlockly --configuration=production",
     "copy_script": "cp -r src/scripts ../../dist/ngx-blockly",
     "link": "npm run build_lib && cd ../../dist/ngx-blockly && npm link",
     "publish_lib": "cd ../../dist/ngx-blockly && npm publish",
