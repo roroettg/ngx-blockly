@@ -219,6 +219,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
     }
 
     private _onWorkspaceChange(event: any) {
+        this.workspaceChange.emit(event);
         if (event.type === Blockly.Events.FINISHED_LOADING) {
             this._finishedLoading = true;
         }
@@ -232,7 +233,6 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
                 this.toolboxChange.emit(event);
             }
         }
-        this.workspaceChange.emit(event);
     }
 
     private _initCustomBlocks(blocks: CustomBlock[]) {
