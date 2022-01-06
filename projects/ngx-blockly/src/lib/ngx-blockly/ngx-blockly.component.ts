@@ -29,7 +29,6 @@ import { NgxBlocklyToolbox } from './plugins/ngx-blockly.toolbox';
 })
 export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
 
-    @Input() public readonly = false;
     @Input() public config: NgxBlocklyConfig = {};
     @Input() public customBlocks: CustomBlock[] = [];
     @Output() public workspaceCreate: EventEmitter<Blockly.WorkspaceSvg> = new EventEmitter<Blockly.WorkspaceSvg>();
@@ -126,11 +125,16 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
     }
 
     ngAfterViewInit() {
+        const readOnly = this.config.readOnly;
         this.config.readOnly = false;
         this.workspace = Blockly.inject(this.primaryContainer.nativeElement, this.config);
         this.workspace.addChangeListener(this._onWorkspaceChange.bind(this));
         this.workspaceCreate.emit(this.workspace);
         this.resize();
+        if (readOnly) {
+            this.setReadonly(true);
+            this.config.readOnly = true;
+        }
     }
 
     ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
@@ -265,8 +269,8 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
         }
     }
 
-    public setReadonly(readonly: boolean) {
-        if (readonly) {
+    public setReadonly(readOnly: boolean) {
+        if (readOnly) {
             this.secondaryContainer.nativeElement.classList.remove('hidden');
             if (!this._secondaryWorkspace) {
                 const config = {...this.config};
