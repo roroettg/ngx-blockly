@@ -28,7 +28,7 @@ import { ExampleBlock } from './blocks/example.block';
 })
 export class AppComponent implements AfterViewInit {
 
-    public readonly = false;
+    public readOnly = false;
 
     public customBlocks: CustomBlock[] = [
         new ExampleBlock()
