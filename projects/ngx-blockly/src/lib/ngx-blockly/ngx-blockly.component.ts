@@ -12,15 +12,15 @@ import {
     SimpleChange,
     ViewChild
 } from '@angular/core';
-import { NgxBlocklyConfig, NgxBlocklyGenerator } from './ngx-blockly.config';
-import { CustomBlock } from './models/custom-block';
+import {NgxBlocklyConfig, NgxBlocklyGenerator} from './ngx-blockly.config';
+import {CustomBlock} from './models/custom-block';
 import * as Blockly from 'blockly/core';
 import 'blockly/dart';
 import 'blockly/javascript';
 import 'blockly/lua';
 import 'blockly/php';
 import 'blockly/python';
-import { NgxBlocklyToolbox } from './plugins/ngx-blockly.toolbox';
+import {NgxBlocklyToolbox} from './plugins/ngx-blockly.toolbox';
 
 @Component({
     selector: 'ngx-blockly',
@@ -31,6 +31,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
 
     @Input() public config: NgxBlocklyConfig = {};
     @Input() public customBlocks: CustomBlock[] = [];
+    @Input() public readOnly = false;
     @Output() public workspaceCreate: EventEmitter<Blockly.WorkspaceSvg> = new EventEmitter<Blockly.WorkspaceSvg>();
     @Output() public workspaceChange: EventEmitter<Blockly.Events.Abstract> = new EventEmitter<Blockly.Events.Abstract>();
     @Output() public toolboxChange: EventEmitter<any> = new EventEmitter<any>();
@@ -138,8 +139,8 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
     }
 
     ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
-        if (changes.readonly) {
-            this.setReadonly(changes.readonly.currentValue);
+        if (changes.readOnly) {
+            this.setReadonly(changes.readOnly.currentValue);
         }
     }
 
@@ -270,6 +271,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
     }
 
     public setReadonly(readOnly: boolean) {
+        this.readOnly = readOnly;
         if (readOnly) {
             this.secondaryContainer.nativeElement.classList.remove('hidden');
             if (!this._secondaryWorkspace) {
