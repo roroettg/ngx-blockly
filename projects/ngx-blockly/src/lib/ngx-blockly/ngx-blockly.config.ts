@@ -11,7 +11,6 @@ export enum NgxBlocklyGenerator {
 }
 
 export interface NgxBlocklyConfig extends Blockly.BlocklyOptions {
-    readonly?: boolean;
     defaultBlocks?: boolean;
     generators?: NgxBlocklyGenerator[];
     plugins?: { [name: string]: any };
