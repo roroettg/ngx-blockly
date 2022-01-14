@@ -269,6 +269,9 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
         if (this.workspace) {
             Blockly.svgResize(this.workspace);
         }
+        if (this._secondaryWorkspace) {
+            Blockly.svgResize(this._secondaryWorkspace);
+        }
     }
 
     public setReadonly(readOnly: boolean) {
