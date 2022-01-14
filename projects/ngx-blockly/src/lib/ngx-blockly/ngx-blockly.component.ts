@@ -139,7 +139,8 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
     }
 
     ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
-        if (changes.readOnly) {
+        //skip this if the change comes before we are initialized
+        if (changes.readOnly && this._secondaryWorkspace) {
             this.setReadonly(changes.readOnly.currentValue);
         }
     }
