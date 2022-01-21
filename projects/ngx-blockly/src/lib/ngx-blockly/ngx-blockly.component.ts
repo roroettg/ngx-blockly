@@ -130,6 +130,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
         this.config.readOnly = false;
         this.workspace = Blockly.inject(this.primaryContainer.nativeElement, this.config);
         this.workspace.addChangeListener(this._onWorkspaceChange.bind(this));
+        this.workspace.fireChangeListener(new Blockly.Events.FinishedLoading());
         this.workspaceCreate.emit(this.workspace);
         this.resize();
         if (readOnly) {
