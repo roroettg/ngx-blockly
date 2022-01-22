@@ -140,7 +140,8 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
     }
 
     ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
-        if (changes.readOnly) {
+        //skip this if the change comes before we are initialized
+        if (changes.readOnly && this._secondaryWorkspace) {
             this.setReadonly(changes.readOnly.currentValue);
         }
     }
@@ -268,6 +269,9 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
     public resize() {
         if (this.workspace) {
             Blockly.svgResize(this.workspace);
+        }
+        if (this._secondaryWorkspace) {
+            Blockly.svgResize(this._secondaryWorkspace);
         }
     }
 
