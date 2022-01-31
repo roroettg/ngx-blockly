@@ -36,4 +36,12 @@ export class ExampleMutator extends BlockMutator {
         console.log('afterBlockInit');
         block.setMutator(new CustomMutator(block));
     }
+
+    loadExtraState(state: any): any {
+    }
+
+    saveExtraState(): any {
+    }
+
+
 }
