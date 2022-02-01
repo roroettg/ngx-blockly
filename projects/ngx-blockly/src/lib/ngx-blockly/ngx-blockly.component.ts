@@ -94,6 +94,12 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
                         },
                         domToMutation: function (xmlElement: any) {
                             customBlock.blockMutator.domToMutation.call(customBlock.blockMutator, this, xmlElement);
+                        },
+                        saveExtraState: function () {
+                            return customBlock.blockMutator.saveExtraState.call(customBlock.blockMutator);
+                        },
+                        loadExtraState: function (state: any) {
+                            customBlock.blockMutator.loadExtraState.call(customBlock.blockMutator, state);
                         }
                     };
                     if (customBlock.blockMutator.blockList && customBlock.blockMutator.blockList.length > 0) {
@@ -140,7 +146,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
     }
 
     ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
-        //skip this if the change comes before we are initialized
+        // skip this if the change comes before we are initialized
         if (changes.readOnly && this._secondaryWorkspace) {
             this.setReadonly(changes.readOnly.currentValue);
         }
