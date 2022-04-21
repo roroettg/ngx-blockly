@@ -291,6 +291,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
                 this._secondaryWorkspace = Blockly.inject(this.secondaryContainer.nativeElement, config);
             }
             Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.textToDom(this.toXml()), this._secondaryWorkspace);
+            Blockly.svgResize(this._secondaryWorkspace);
         } else {
             if (this._secondaryWorkspace) {
                 this.secondaryContainer.nativeElement.classList.add('hidden');
