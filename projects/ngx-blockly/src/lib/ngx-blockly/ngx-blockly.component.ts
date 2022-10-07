@@ -33,7 +33,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
     @Input() public customBlocks: CustomBlock[] = [];
     @Input() public readOnly = false;
     @Output() public workspaceCreate: EventEmitter<Blockly.WorkspaceSvg> = new EventEmitter<Blockly.WorkspaceSvg>();
-    @Output() public workspaceChange: EventEmitter<Blockly.Events.Abstract> = new EventEmitter<Blockly.Events.Abstract>();
+    @Output() public workspaceChange: EventEmitter<Blockly.Events.AbstractEventJson> = new EventEmitter<Blockly.Events.AbstractEventJson>();
     @Output() public toolboxChange: EventEmitter<any> = new EventEmitter<any>();
     @Output() public dartCode: EventEmitter<string> = new EventEmitter<string>();
     @Output() public javascriptCode: EventEmitter<string> = new EventEmitter<string>();
