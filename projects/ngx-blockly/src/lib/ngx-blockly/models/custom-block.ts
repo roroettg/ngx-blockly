@@ -25,7 +25,7 @@ export abstract class CustomBlock extends Block {
 
     public abstract defineBlock();
 
-    public onChange(changeEvent: Blockly.Events.Abstract) {
+    public onChange(changeEvent: Blockly.Events.AbstractEventJson) {
         // nothing to do
     }
 

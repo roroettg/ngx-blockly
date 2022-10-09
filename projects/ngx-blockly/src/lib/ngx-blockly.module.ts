@@ -12,20 +12,21 @@ import * as Blockly from 'blockly/core';
 export class NgxBlocklyModule {
 }
 
-Blockly.ToolboxCategory.prototype.parseContents_ = function (categoryDef) {
-    const contents = categoryDef['contents'];
-    if (categoryDef['custom']) {
-        this.flyoutItems_ = categoryDef['custom'];
-    } else if (contents) {
-        for (let i = 0, itemDef; (itemDef = contents[i]); i++) {
-            const flyoutItem = (itemDef);
-            this.flyoutItems_.push(flyoutItem);
-        }
-    }
-    if (categoryDef['categoryclass']) {
-        this.cssConfig_.row += ' ' + categoryDef['categoryclass'];
-    }
-};
+// Still needed?
+// Blockly.ToolboxCategory.prototype.parseContents_ = function (categoryDef) {
+//     const contents = categoryDef['contents'];
+//     if (categoryDef['custom']) {
+//         this.flyoutItems_ = categoryDef['custom'];
+//     } else if (contents) {
+//         for (let i = 0, itemDef; (itemDef = contents[i]); i++) {
+//             const flyoutItem = (itemDef);
+//             this.flyoutItems_.push(flyoutItem);
+//         }
+//     }
+//     if (categoryDef['categoryclass']) {
+//         this.cssConfig_.row += ' ' + categoryDef['categoryclass'];
+//     }
+// };
 
 Blockly.CollapsibleToolboxCategory.prototype.parseContents_ = function (categoryDef) {
     const contents = categoryDef['contents'];
