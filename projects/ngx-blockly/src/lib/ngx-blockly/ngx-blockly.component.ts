@@ -21,6 +21,11 @@ import 'blockly/lua';
 import 'blockly/php';
 import 'blockly/python';
 import {NgxBlocklyToolbox} from './plugins/ngx-blockly.toolbox';
+import {dartGenerator} from 'blockly/dart';
+import {luaGenerator} from 'blockly/lua';
+import {javascriptGenerator} from 'blockly/javascript';
+import {phpGenerator} from 'blockly/php';
+import {pythonGenerator} from 'blockly/python';
 
 @Component({
     selector: 'ngx-blockly',
@@ -175,19 +180,19 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
         for (const generator of this.config.generators) {
             switch (generator) {
                 case NgxBlocklyGenerator.DART:
-                    this.dartCode.emit(Blockly[NgxBlocklyGenerator.DART].workspaceToCode(Blockly.Workspace.getById(workspaceId)));
+                    this.dartCode.emit(dartGenerator.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
                     break;
                 case NgxBlocklyGenerator.LUA:
-                    this.luaCode.emit(Blockly[NgxBlocklyGenerator.LUA].workspaceToCode(Blockly.Workspace.getById(workspaceId)));
+                    this.luaCode.emit(luaGenerator.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
                     break;
                 case NgxBlocklyGenerator.JAVASCRIPT:
-                    this.javascriptCode.emit(Blockly[NgxBlocklyGenerator.JAVASCRIPT].workspaceToCode(Blockly.Workspace.getById(workspaceId)));
+                    this.javascriptCode.emit(javascriptGenerator.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
                     break;
                 case NgxBlocklyGenerator.PHP:
-                    this.phpCode.emit(Blockly[NgxBlocklyGenerator.PHP].workspaceToCode(Blockly.Workspace.getById(workspaceId)));
+                    this.phpCode.emit(phpGenerator.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
                     break;
                 case NgxBlocklyGenerator.PYTHON:
-                    this.pythonCode.emit(Blockly[NgxBlocklyGenerator.PYTHON].workspaceToCode(Blockly.Workspace.getById(workspaceId)));
+                    this.pythonCode.emit(pythonGenerator.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
                     break;
                 case NgxBlocklyGenerator.XML:
                     this.xmlCode.emit(Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.Workspace.getById(workspaceId))));

@@ -22,10 +22,10 @@
   "dependencies": {
     "tslib": "^2.3.1",
     "angular2-uuid": "^1.1.1",
-    "blockly": "^9.0.0"
+    "blockly": "^9.0.1"
   },
   "scripts": {
-    "build_lib": "ng build NgxBlockly --configuration=production",
+    "build_lib": "ng build NgxBlockly --configuration=production --watch",
     "copy_script": "cp -r src/scripts ../../dist/ngx-blockly",
     "link": "npm run build_lib && cd ../../dist/ngx-blockly && npm link",
     "publish_lib": "cd ../../dist/ngx-blockly && npm publish",
