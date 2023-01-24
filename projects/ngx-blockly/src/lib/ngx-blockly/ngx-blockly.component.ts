@@ -21,6 +21,11 @@ import 'blockly/lua';
 import 'blockly/php';
 import 'blockly/python';
 import {NgxBlocklyToolbox} from './plugins/ngx-blockly.toolbox';
+import {dartGenerator} from 'blockly/dart';
+import {luaGenerator} from 'blockly/lua';
+import {javascriptGenerator} from 'blockly/javascript';
+import {phpGenerator} from 'blockly/php';
+import {pythonGenerator} from 'blockly/python';
 
 @Component({
     selector: 'ngx-blockly',
@@ -33,7 +38,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
     @Input() public customBlocks: CustomBlock[] = [];
     @Input() public readOnly = false;
     @Output() public workspaceCreate: EventEmitter<Blockly.WorkspaceSvg> = new EventEmitter<Blockly.WorkspaceSvg>();
-    @Output() public workspaceChange: EventEmitter<Blockly.Events.Abstract> = new EventEmitter<Blockly.Events.Abstract>();
+    @Output() public workspaceChange: EventEmitter<Blockly.Events.AbstractEventJson> = new EventEmitter<Blockly.Events.AbstractEventJson>();
     @Output() public toolboxChange: EventEmitter<any> = new EventEmitter<any>();
     @Output() public dartCode: EventEmitter<string> = new EventEmitter<string>();
     @Output() public javascriptCode: EventEmitter<string> = new EventEmitter<string>();
@@ -94,6 +99,12 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
                         },
                         domToMutation: function (xmlElement: any) {
                             customBlock.blockMutator.domToMutation.call(customBlock.blockMutator, this, xmlElement);
+                        },
+                        saveExtraState: function () {
+                            return customBlock.blockMutator.saveExtraState.call(customBlock.blockMutator);
+                        },
+                        loadExtraState: function (state: any) {
+                            customBlock.blockMutator.loadExtraState.call(customBlock.blockMutator, state);
                         }
                     };
                     if (customBlock.blockMutator.blockList && customBlock.blockMutator.blockList.length > 0) {
@@ -126,10 +137,11 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
     }
 
     ngAfterViewInit() {
-        const readOnly = this.config.readOnly;
+        const readOnly = this.config.readOnly || this.readOnly;
         this.config.readOnly = false;
         this.workspace = Blockly.inject(this.primaryContainer.nativeElement, this.config);
         this.workspace.addChangeListener(this._onWorkspaceChange.bind(this));
+        this.workspace.fireChangeListener(new Blockly.Events.FinishedLoading());
         this.workspaceCreate.emit(this.workspace);
         this.resize();
         if (readOnly) {
@@ -139,7 +151,8 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
     }
 
     ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
-        if (changes.readOnly) {
+        // skip this if the change comes before we are initialized
+        if (changes.readOnly && this._secondaryWorkspace) {
             this.setReadonly(changes.readOnly.currentValue);
         }
     }
@@ -167,19 +180,19 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
         for (const generator of this.config.generators) {
             switch (generator) {
                 case NgxBlocklyGenerator.DART:
-                    this.dartCode.emit(Blockly[NgxBlocklyGenerator.DART].workspaceToCode(Blockly.Workspace.getById(workspaceId)));
+                    this.dartCode.emit(dartGenerator.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
                     break;
                 case NgxBlocklyGenerator.LUA:
-                    this.luaCode.emit(Blockly[NgxBlocklyGenerator.LUA].workspaceToCode(Blockly.Workspace.getById(workspaceId)));
+                    this.luaCode.emit(luaGenerator.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
                     break;
                 case NgxBlocklyGenerator.JAVASCRIPT:
-                    this.javascriptCode.emit(Blockly[NgxBlocklyGenerator.JAVASCRIPT].workspaceToCode(Blockly.Workspace.getById(workspaceId)));
+                    this.javascriptCode.emit(javascriptGenerator.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
                     break;
                 case NgxBlocklyGenerator.PHP:
-                    this.phpCode.emit(Blockly[NgxBlocklyGenerator.PHP].workspaceToCode(Blockly.Workspace.getById(workspaceId)));
+                    this.phpCode.emit(phpGenerator.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
                     break;
                 case NgxBlocklyGenerator.PYTHON:
-                    this.pythonCode.emit(Blockly[NgxBlocklyGenerator.PYTHON].workspaceToCode(Blockly.Workspace.getById(workspaceId)));
+                    this.pythonCode.emit(pythonGenerator.workspaceToCode(Blockly.Workspace.getById(workspaceId)));
                     break;
                 case NgxBlocklyGenerator.XML:
                     this.xmlCode.emit(Blockly.Xml.domToPrettyText(Blockly.Xml.workspaceToDom(Blockly.Workspace.getById(workspaceId))));
@@ -268,6 +281,9 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
         if (this.workspace) {
             Blockly.svgResize(this.workspace);
         }
+        if (this._secondaryWorkspace) {
+            Blockly.svgResize(this._secondaryWorkspace);
+        }
     }
 
     public setReadonly(readOnly: boolean) {
@@ -280,6 +296,7 @@ export class NgxBlocklyComponent implements OnInit, AfterViewInit, OnChanges, On
                 this._secondaryWorkspace = Blockly.inject(this.secondaryContainer.nativeElement, config);
             }
             Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.textToDom(this.toXml()), this._secondaryWorkspace);
+            Blockly.svgResize(this._secondaryWorkspace);
         } else {
             if (this._secondaryWorkspace) {
                 this.secondaryContainer.nativeElement.classList.add('hidden');

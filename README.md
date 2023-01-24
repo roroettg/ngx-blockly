@@ -22,6 +22,8 @@ import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { NgxBlocklyModule } from 'ngx-blockly';
 
+import 'blockly/blocks'; // needed if you want to use the blockly default blocks
+
 @NgModule({
   declarations: [
     AppComponent

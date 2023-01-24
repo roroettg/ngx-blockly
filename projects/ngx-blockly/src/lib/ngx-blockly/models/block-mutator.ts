@@ -8,10 +8,6 @@ export abstract class BlockMutator {
         this._blockList = blockList;
     }
 
-    public abstract mutationToDom(block: any);
-
-    public abstract domToMutation(block: any, xmlElement: any);
-
     public abstract decompose(block: any, workspace: any);
 
     public abstract compose(block: any, topBlock: any);
@@ -19,6 +15,24 @@ export abstract class BlockMutator {
     public abstract saveConnections(block: any, containerBlock: any);
 
     public abstract afterBlockInit(block: any);
+
+    public abstract saveExtraState();
+
+    public abstract loadExtraState(state);
+
+    /**
+     * @deprecated Use saveExtraState instead
+     * https://developers.google.com/blockly/guides/create-custom-blocks/extensions#saveextrastate_and_loadextra
+     */
+    public mutationToDom(block: any) {
+    }
+
+    /**
+     * @deprecated Use loadExtraState instead
+     * https://developers.google.com/blockly/guides/create-custom-blocks/extensions#saveextrastate_and_loadextrastate
+     */
+    public domToMutation(block: any, xmlElement: any) {
+    }
 
     get name(): string {
         return this._name;

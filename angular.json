@@ -185,7 +185,6 @@
       }
     }
   },
-  "defaultProject": "NgxBlocklyLibrary",
   "cli": {
     "analytics": false
   }

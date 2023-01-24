@@ -9,7 +9,7 @@ export abstract class CustomBlock extends Block {
     private _args: any[];
 
 
-    constructor(type: string, blockMutator?: BlockMutator, ...args: any[]) {
+    protected constructor(type: string, blockMutator?: BlockMutator, ...args: any[]) {
         super(type);
         this._blockMutator = blockMutator ? blockMutator : null;
         this._args = args;
@@ -25,7 +25,7 @@ export abstract class CustomBlock extends Block {
 
     public abstract defineBlock();
 
-    public onChange(changeEvent: Blockly.Events.Abstract) {
+    public onChange(changeEvent: Blockly.Events.AbstractEventJson) {
         // nothing to do
     }
 

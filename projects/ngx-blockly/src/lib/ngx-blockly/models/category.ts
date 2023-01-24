@@ -164,19 +164,26 @@ export const TEXT_CATEGORY: Category = new Category('Text', '%{BKY_TEXTS_HUE}', 
     new XmlBlock('text_join'),
     new XmlBlock('text_append'),
     new XmlBlock('text_length'),
+    new XmlBlock('text_count'),
     new XmlBlock('text_isEmpty'),
     new XmlBlock('text_indexOf'),
     new XmlBlock('text_charAt'),
     new XmlBlock('text_getSubstring'),
     new XmlBlock('text_changeCase'),
+    new XmlBlock('text_multiline'),
+    new XmlBlock('text_replace'),
+    new XmlBlock('text_reverse'),
     new XmlBlock('text_trim'),
     new XmlBlock('text_print'),
+    new XmlBlock('text_prompt'),
     new XmlBlock('text_prompt_ext')
 ]);
 
 export const LISTS_CATEGORY: Category = new Category('Lists', '%{BKY_LISTS_HUE}', [
     new XmlBlock('lists_create_with'),
+    new XmlBlock('lists_create_empty'),
     new XmlBlock('lists_repeat'),
+    new XmlBlock('lists_reverse'),
     new XmlBlock('lists_length'),
     new XmlBlock('lists_isEmpty'),
     new XmlBlock('lists_indexOf'),
@@ -190,7 +197,7 @@ export const LISTS_CATEGORY: Category = new Category('Lists', '%{BKY_LISTS_HUE}'
 export const COLOUR_CATEGORY: Category = new Category('Colours', '%{BKY_COLOUR_HUE}', [
     new XmlBlock('colour_picker'),
     new XmlBlock('colour_random'),
-    new XmlBlock('colour_random'),
+    new XmlBlock('colour_rgb'),
     new XmlBlock('colour_blend')
 ]);
 
