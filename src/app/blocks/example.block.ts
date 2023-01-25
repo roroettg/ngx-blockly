@@ -6,7 +6,6 @@ export class ExampleBlock extends CustomBlock {
     constructor() {
         super('example_block', new ExampleMutator('example_mutator'));
         this.class = ExampleBlock;
-        this.disabled = true;
     }
 
     public defineBlock() {
