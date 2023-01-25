@@ -1,5 +1,4 @@
 import * as Blockly from 'blockly/core';
-import { BlockStyle } from './models/theme';
 
 export enum NgxBlocklyGenerator {
     DART = 'Dart',
