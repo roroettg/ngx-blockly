@@ -27,7 +27,7 @@
     "angular2-uuid": "^1.1.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^15.1.2",
+    "@angular-devkit/build-angular": "^21.2.0",
     "@angular/cli": "^15.1.2",
     "@angular/compiler-cli": "^15.1.1",
     "@angular/language-service": "^15.1.1",
@@ -35,7 +35,7 @@
     "@types/jasminewd2": "~2.0.6",
     "@types/node": "^12.11.1",
     "codelyzer": "^6.0.0",
-    "ng-packagr": "^15.1.1",
+    "ng-packagr": "^21.2.0",
     "protractor": "~7.0.0",
     "ts-node": "~8.1.0",
     "tslint": "~6.1.0",
